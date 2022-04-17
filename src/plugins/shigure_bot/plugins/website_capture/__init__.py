@@ -39,4 +39,4 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
     await matcher.finish(f'\n{e.message}', at_sender=True)
 
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'

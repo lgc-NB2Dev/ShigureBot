@@ -7,7 +7,7 @@ from playwright.async_api import Page, ViewportSize
 async def get_capture(url, delay, width, height):
     async with get_new_page(viewport=ViewportSize(width=width, height=height)) as page:  # type:Page
         await page.goto(url)
-        await page.wait_for_timeout(delay)
+        await page.wait_for_timeout(delay * 1000)
         img = await page.screenshot(type='png', full_page=True)
     return img
 
@@ -15,10 +15,11 @@ async def get_capture(url, delay, width, height):
 async def get_msg(url: str, delay: int, width: int, height: int):
     if url.find('http://') == -1 and url.find('https://') == -1:
         url = 'http://' + url
+
     try:
         img = await get_capture(url, delay, width, height)
     except Exception as e:
-        msg = f'出错了！请检查后台输出{e!r}'
+        msg = f'出错了！请检查后台输出\n{e.args[0]}'
         logger.exception('获取网页截图出错')
     else:
         msg = MessageSegment.image(img)
