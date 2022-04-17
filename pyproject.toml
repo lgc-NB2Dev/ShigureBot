@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ShigureBot"
-version = "0.1.0"
+version = "0.1.1
 description = "Kawaii no Shigure Bot~"
 authors = ["student_2333 <lgc2333@126.com>"]
 license = "GPL-3.0 License"
@@ -16,6 +16,7 @@ pydantic = "^1.9.0"
 nonebot-plugin-htmlrender = "^0.0.4.5"
 nonebot-plugin-apscheduler = "^0.1.2"
 playwright = "^1.20.1"
+nonebot-adapter-onebot = "^2.0.0-beta.1"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"

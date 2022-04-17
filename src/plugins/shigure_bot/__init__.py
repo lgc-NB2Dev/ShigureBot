@@ -1,16 +1,10 @@
-import os.path
-import pkgutil
-import sys
+from pathlib import Path
 
-from nonebot import load_plugin
+import nonebot
 
-preloads = ['config']
+_sub_plugins = set()
+_sub_plugins |= nonebot.load_plugins(
+    str((Path(__file__).parent / "plugins").
+        resolve()))
 
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'plugins'))
-sys.path.append(path)
-
-for pl in preloads:
-    load_plugin(pl)
-for pl in pkgutil.iter_modules([path]):
-    if pl.name not in preloads:
-        load_plugin(pl.name)
+__version__ = '0.1.1'
