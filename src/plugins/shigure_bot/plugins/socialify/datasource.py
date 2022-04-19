@@ -2,7 +2,7 @@ from os import getcwd
 
 from aiohttp import ClientSession
 from nonebot_plugin_htmlrender import get_new_page
-from playwright.async_api import Page
+from playwright.async_api import FloatRect, Page
 
 from .utils import parse_dict
 
@@ -29,8 +29,13 @@ async def get_cover(repo, **kwargs):
             ret = await resp.text()
 
     async with get_new_page() as page:  # type: Page
+        zoom = 2.0
+
         await page.goto(f'file://{getcwd()}')
         await page.set_content(ret, wait_until="networkidle")
-        img = await page.locator('svg').screenshot()
+        svg = page.locator('svg')
+        view_box = [int(x) * zoom for x in (await svg.get_attribute('viewBox')).split(' ')]
+        await page.evaluate(f'document.getElementsByTagName(\'svg\')[0].style.zoom={zoom};')
+        img = await page.screenshot(clip=FloatRect(x=8, y=8, width=view_box[2], height=view_box[3]))
 
     return img

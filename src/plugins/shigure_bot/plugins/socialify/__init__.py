@@ -50,21 +50,24 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
 
 @on_regex(regexp, priority=99).handle()
 async def _(matcher: Matcher, group: tuple[Any, ...] = RegexGroup()):
-    logger.debug(str(group))
-    await matcher.finish(await get_im(group))
+    ret = await get_im(group, quiet=True)
+    if ret:
+        await matcher.finish(ret)
 
 
-async def get_im(group, **kwargs):
+async def get_im(group, quiet=False, **kwargs):
     try:
         ret = await get_cover(f'{group[1]}/{group[2]}', **kwargs)
     except (IndexError, TypeError) as e:
         logger.opt(exception=e).exception('获取Github仓库简介图失败')
-        return '请输入正确格式的存储库链接'
+        if not quiet:
+            return '请输入正确格式的存储库链接'
     except Exception as e:
         logger.opt(exception=e).exception('获取Github仓库简介图失败')
-        return f'获取Github仓库简介图失败：{e.args[0]}'
+        if not quiet:
+            return f'获取Github仓库简介图失败：{e.args[0]}'
     else:
         return MessageSegment.image(ret)
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
