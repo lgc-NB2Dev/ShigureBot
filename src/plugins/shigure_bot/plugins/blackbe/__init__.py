@@ -30,13 +30,10 @@ async def delete_temp():
 
 @on_command('查云黑').handle()
 async def _(matcher: Matcher, args: Message = CommandArg()):
-    ret = None
-    for i in args:
-        if i.type == 'at':
-            ret = await get_info_msg(qq=i.data['qq'])
-            break
-
-    if not ret:
+    at = args['at']
+    if at:
+        ret = await get_info_msg(qq=at[0].data['qq'])
+    else:
         msg = str(args).strip()
         if not msg:
             ret = '指令格式：查云黑<XboxID/QQ号/@某人/XUID>'
@@ -70,4 +67,4 @@ async def _(event: Event, matcher: Matcher):
                     temp[f'{event.group_id}.{event.user_id}'] = True
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'

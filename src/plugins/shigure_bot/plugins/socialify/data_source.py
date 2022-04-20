@@ -1,10 +1,19 @@
+import base64
 from os import getcwd
 
 from aiohttp import ClientSession
 from nonebot_plugin_htmlrender import get_new_page
 from playwright.async_api import FloatRect, Page
 
-from .utils import parse_dict
+
+def parse_dict(d: dict):
+    for k, v in d.copy().items():
+        if v is None or v is False:
+            d.pop(k)
+        if v is True:
+            d[k] = 1
+    return d
+
 
 
 async def get_cover(repo, **kwargs):

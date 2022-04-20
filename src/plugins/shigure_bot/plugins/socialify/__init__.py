@@ -3,15 +3,15 @@ from argparse import Namespace
 from typing import Any
 
 from nonebot import logger, on_regex, on_shell_command
-from nonebot.adapters.onebot.v11 import MessageSegment
+from nonebot.adapters.onebot.v11 import Event, MessageSegment
 from nonebot.exception import ParserExit
 from nonebot.matcher import Matcher
 from nonebot.params import RegexGroup, ShellCommandArgs
 from nonebot.rule import ArgumentParser
 
-from .datasource import get_cover
+from .data_source import get_cover
 
-regexp = '^(https?:\/\/github\.com\/)?([^/]+)\/([^/]+)'
+regexp = '(https?:\/\/github\.com\/)?([^/]+)\/([^/]+)'
 
 parser = ArgumentParser()
 parser.add_argument('url', type=str, help='Github repo url')
@@ -22,7 +22,7 @@ parser.add_argument('--font', type=str, help='Set font type', default='Inter',
 parser.add_argument('--forks', action='store_true', help='Show fork num')
 parser.add_argument('--issues', action='store_true', help='Show issue num')
 parser.add_argument('--language', action='store_true', help='Show repo\'s main language')
-parser.add_argument('--logo', type=str, help='Show Github logo / Custom logo (provide a pic link)')
+parser.add_argument('--logo', type=str, help='Custom logo (provide a pic link or reply to a pic)')
 parser.add_argument('--name', action='store_true', help='Show repo name')
 parser.add_argument('--owner', action='store_true', help='Show repo owner')
 parser.add_argument('--pattern', type=str, help='Set background pattern', default='Plus',
@@ -36,9 +36,18 @@ parser.add_argument('--theme', type=str, help='Set pic theme', default='Light',
 handler = on_shell_command("socialify", parser=parser)
 
 
+def get_reply_img(event: Event):
+    if event.reply:
+        img = event.reply.message["image"]
+        if img:
+            return img[0].data['url']
+
+
 @handler.handle()
-async def _(matcher: Matcher, args: Namespace = ShellCommandArgs()):
-    await matcher.finish(await get_im(re.match(regexp, args.url).groups(), **args.__dict__))
+async def _(matcher: Matcher, event: Event, args: Namespace = ShellCommandArgs()):
+    kwargs = args.__dict__
+    kwargs['logo'] = get_reply_img(event)
+    await matcher.finish(await get_im(re.match(regexp, args.url).groups(), **kwargs))
 
 
 @handler.handle()
@@ -49,8 +58,8 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
 
 
 @on_regex(regexp, priority=99).handle()
-async def _(matcher: Matcher, group: tuple[Any, ...] = RegexGroup()):
-    ret = await get_im(group, quiet=True)
+async def _(matcher: Matcher, event: Event, group: tuple[Any, ...] = RegexGroup()):
+    ret = await get_im(group, quiet=True, logo=get_reply_img(event))
     if ret:
         await matcher.finish(ret)
 
@@ -70,4 +79,4 @@ async def get_im(group, quiet=False, **kwargs):
         return MessageSegment.image(ret)
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
