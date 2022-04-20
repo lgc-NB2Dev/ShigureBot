@@ -3,7 +3,7 @@ name = "ShigureBot"
 version = "0.1.5"
 description = "Kawaii no Shigure Bot~"
 authors = ["student_2333 <lgc2333@126.com>"]
-license = "AGPL-2.1"
+license = "LGPL-2.1"
 readme = "README.md"
 
 [tool.poetry.dependencies]
