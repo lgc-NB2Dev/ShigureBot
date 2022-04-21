@@ -14,4 +14,4 @@ for pl in pkgutil.iter_modules([path]):
     if pl.name not in except_plugins:
         load_plugin(pl.name)
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
