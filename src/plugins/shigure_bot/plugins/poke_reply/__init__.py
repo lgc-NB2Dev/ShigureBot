@@ -15,13 +15,23 @@ async def read_file(file_name):
     return ret
 
 
+async def get_msg():
+    reply = random.choice(conf)
+    msg = None
+    if reply.type == 'image':
+        msg = MessageSegment.image(await read_file(reply.content))
+    elif reply.type == 'text':
+        msg = reply.content
+    return msg, reply.action
+
+
 @on_notice(rule=to_me()).handle()
 async def _(event: Event, matcher: Matcher, _: PokeNotifyEvent):
-    reply = random.choice(conf)
-    msg = MessageSegment.image(await read_file(reply.content)) if reply.type == 'image' else reply.content
-    await matcher.send(msg)
-    if reply.action:
-        await matcher.send(MessageSegment('poke', {'qq': event.user_id}))
+    reply, action = await get_msg()
+    if reply:
+        await matcher.send(reply)
+        if action:
+            await matcher.send(MessageSegment('poke', {'qq': event.user_id}))
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'

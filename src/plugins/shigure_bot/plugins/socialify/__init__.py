@@ -1,17 +1,16 @@
 import re
 from argparse import Namespace
-from typing import Any
 
-from nonebot import logger, on_regex, on_shell_command
+from nonebot import logger, on_message, on_shell_command
 from nonebot.adapters.onebot.v11 import Event, MessageSegment
 from nonebot.exception import ParserExit
 from nonebot.matcher import Matcher
-from nonebot.params import RegexGroup, ShellCommandArgs
+from nonebot.params import ShellCommandArgs
 from nonebot.rule import ArgumentParser
 
 from .data_source import get_cover
 
-regexp = '(https?:\/\/github\.com\/)?([^/]+)\/([^/]+)'
+regexp = re.compile(r'(https?://)?(github\.com/)?([a-z0-9-_.]+)/([a-z0-9-_.]+)', re.IGNORECASE)
 
 parser = ArgumentParser()
 parser.add_argument('url', type=str, help='Github repo url')
@@ -57,16 +56,21 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
     await matcher.finish(f'\n{e.message}', at_sender=True)
 
 
-@on_regex(regexp, priority=99).handle()
-async def _(matcher: Matcher, event: Event, group: tuple[Any, ...] = RegexGroup()):
-    ret = await get_im(group, quiet=True, logo=get_reply_img(event))
+@on_message(
+    rule=lambda event: re.search(regexp, event.get_plaintext()) is not None,
+    priority=99
+).handle()
+async def _(matcher: Matcher, event: Event):
+    ret = await get_im(re.search(regexp, event.get_plaintext()).groups(),
+                       quiet=True, logo=get_reply_img(event))
     if ret:
         await matcher.finish(ret)
 
 
 async def get_im(group, quiet=False, **kwargs):
+    logger.debug(group)
     try:
-        ret = await get_cover(f'{group[1]}/{group[2]}', **kwargs)
+        ret = await get_cover(f'{group[2]}/{group[3]}', **kwargs)
     except (IndexError, TypeError) as e:
         logger.opt(exception=e).exception('获取Github仓库简介图失败')
         if not quiet:
@@ -79,4 +83,4 @@ async def get_im(group, quiet=False, **kwargs):
         return MessageSegment.image(ret)
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'

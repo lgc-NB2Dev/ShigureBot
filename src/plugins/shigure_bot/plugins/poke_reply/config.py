@@ -1,7 +1,8 @@
 import asyncio
 import os
-from typing import Optional
+from typing import Literal, Optional
 
+from nonebot import logger
 from pydantic import BaseModel
 
 from config import BaseConfig, init
@@ -18,13 +19,18 @@ class Config(BaseConfig):
                     tmp.remove(i)
                     for n in find_all_file(i.content):
                         tmp.append(Reply(type='image', content=n, action=i.action))
+                elif i.type == 'texts':
+                    tmp.remove(i)
+                    for n in i.content:
+                        tmp.append(Reply(type='text', content=n, action=i.action))
+            logger.debug(f'Parsed config: {tmp}')
             self._tmp = tmp
         return self._tmp
 
 
 class Reply(BaseModel):
-    type: str
-    content: str
+    type: Literal['text', 'image', 'texts', 'image_folder']
+    content: str | list[str]
     action: Optional[bool]
 
 
