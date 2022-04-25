@@ -1,27 +1,23 @@
 import asyncio
 from typing import Optional
 
-from pydantic import BaseSettings
+from pydantic import BaseModel
 
-from config import init
+from .._config import init
 
 config = None
 
 
-class Config(BaseSettings):
-    # Your Config Here
+class ConfigModel(BaseModel):
     token: Optional[str] = ''
     ignore_repos: Optional[list[Optional[str]]] = []
-
-    class Config:
-        extra = "ignore"
 
 
 async def update_conf():
     global config
     config = await init(
         'blackbe',
-        Config,
+        ConfigModel,
         {'token': '', 'ignore_repos': []}
     )
 

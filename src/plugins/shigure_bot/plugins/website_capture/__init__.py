@@ -7,7 +7,7 @@ from nonebot.params import ShellCommandArgs
 from nonebot.rule import ArgumentParser
 
 from .capture import get_msg
-from .config import config
+from .._config import config
 
 parser = ArgumentParser()
 parser.add_argument('url', type=str, help='URL to capture')
@@ -39,4 +39,4 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
     await matcher.finish(f'\n{e.message}', at_sender=True)
 
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'

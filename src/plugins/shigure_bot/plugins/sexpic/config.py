@@ -1,27 +1,28 @@
 import asyncio
 
-from pydantic import BaseSettings
+from pydantic import BaseModel
 
-from config import init
+from .._config import init
 
 config = None
 
 
-class Config(BaseSettings):
+class ConfigModel(BaseModel):
     only_private: bool
     trigger_words: list[str]
     delay: int
-
-    class Config:
-        extra = "ignore"
+    proxy: str
 
 
 async def update_conf():
     global config
     config = await init(
         'sexpic',
-        Config,
-        {'only_private': False, 'trigger_words': ['色图', '涩图', '瑟图', '二次元', '二刺猿', '二刺螈'], 'delay': 120}
+        ConfigModel,
+        {'only_private' : False,
+         'trigger_words': ['色图', '涩图', '瑟图', '二次元', '二刺猿', '二刺螈'],
+         'delay'        : 120,
+         'proxy'        : 'http://127.0.0.1:10809'}
     )
 
 

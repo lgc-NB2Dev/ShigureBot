@@ -1,24 +1,21 @@
 import asyncio
 
-from pydantic import BaseSettings
+from pydantic import BaseModel
 
-from config import init
+from .._config import init
 
 config = None
 
 
-class Config(BaseSettings):
+class ConfigModel(BaseModel):
     ignore_sites: list[str]
-
-    class Config:
-        extra = "ignore"
 
 
 async def update_conf():
     global config
-    config = await init(
+    config= await init(
         'website_capture',
-        Config,
+        ConfigModel,
         {'ignore_sites': ['xvideos.com', 'pornhub.com']}
     )
 

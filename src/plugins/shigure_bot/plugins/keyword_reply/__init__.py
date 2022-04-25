@@ -12,4 +12,4 @@ async def _(event: Event, matcher: Matcher):
         await matcher.finish(msg)
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'

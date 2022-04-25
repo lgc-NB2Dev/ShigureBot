@@ -4,6 +4,7 @@ import os.path
 from typing import Callable
 
 import aiofiles
+import pydantic
 from nonebot import logger
 from pydantic import BaseModel
 
@@ -21,7 +22,7 @@ def _model_to_object(model):
 class BaseConfig:
     """屎山类"""
 
-    def __init__(self, filename: str, model: Callable[[...], BaseModel] = None, default_conf: dict = None):
+    def __init__(self, filename, model=None, default_conf=None):
         self._filename = filename
         self._model = model
         self._default_conf = default_conf
@@ -30,16 +31,20 @@ class BaseConfig:
 
     async def get(self):
         if not self._tmp:
-            cf = await self.load()
-            if self._model:
-                if isinstance(cf, dict):
-                    self._tmp = self._model(**cf)
-                elif isinstance(cf, list):
-                    self._tmp = [self._model(**x) for x in cf]
+            try:
+                cf = await self.load()
+                if self._model:
+                    if isinstance(cf, dict):
+                        self._tmp = self._model(**cf)
+                    elif isinstance(cf, list):
+                        self._tmp = [self._model(**x) for x in cf]
+                    else:
+                        raise TypeError('Type not supported')
                 else:
-                    raise TypeError('Type not supported')
-            else:
-                self._tmp = cf
+                    self._tmp = cf
+            except (pydantic.ValidationError, json.JSONDecodeError) as e:
+                logger.exception('配置文件格式错误')
+                raise e
 
         return self._tmp
 
@@ -50,15 +55,13 @@ class BaseConfig:
             async with aiofiles.open(self._path, encoding='utf-8') as f:
                 conf = json.loads(await f.read())
 
-            '''
             if isinstance(conf, dict) and isinstance(self._default_conf, dict):
                 # 将未配置的配置项配置为默认
                 for k, v in self._default_conf.items():
                     if not k in conf:
                         conf[k] = v
-            '''
 
-        await self.save(conf)  # format
+        await self.save(conf)  # format / write default
         logger.debug(f'Loaded config "{self._filename}": {conf}')
         return conf
 
@@ -91,7 +94,6 @@ class BaseConfig:
         if isinstance(item, str) and item.startswith('_'):
             return self.__dict__[item]
         else:
-            self._check_tmp_is_model()
             return getattr(self._tmp, item)
 
     def __setattr__(self, key, value):
@@ -124,11 +126,12 @@ class BaseConfig:
         yield from self._tmp
 
 
-async def init(*args, cls: Callable[[...], BaseConfig] = None, **kwargs):
+async def init(filename: str, model: Callable[[...], BaseModel] = None, default_conf: dict | list = None,
+               cls: Callable[..., BaseConfig] = None):
     if cls:
-        conf = cls(*args, **kwargs)
+        conf = cls(filename, model, default_conf)
     else:
-        conf = BaseConfig(*args, **kwargs)
+        conf = BaseConfig(filename, model, default_conf)
     _tmp.append(conf)
     await conf.get()
     return conf

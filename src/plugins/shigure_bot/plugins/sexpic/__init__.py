@@ -1,9 +1,8 @@
 import time
 
-from nonebot import logger, on_message
+from nonebot import on_message
 from nonebot.adapters.onebot.v11 import ActionFailed
 from nonebot.adapters.onebot.v11.event import Event
-from nonebot.exception import FinishedException
 from nonebot.matcher import Matcher
 
 from .config import config as conf
@@ -41,21 +40,15 @@ async def _(event: Event, matcher: Matcher):
                     break
 
             try:
-                ret = await get_pic(tag.strip())
+                ret, clear = await get_pic(tag.strip())
                 await matcher.finish(ret, at_sender=True)
-            except Exception as e:
-                if isinstance(e, ActionFailed):
-                    await matcher.finish('抱歉，消息被tx屏蔽…', at_sender=True)
-                elif isinstance(e, IndexError):
-                    await matcher.finish('没有找到图片', at_sender=True)
-                elif isinstance(e, FinishedException):
-                    pass
-                else:
-                    logger.exception('获取图片失败')
-                    await matcher.finish('获取图片失败，请检查后台输出', at_sender=True)
-                    tmp_dict[chat_id] = None
+            except ActionFailed:
+                clear = True
+                await matcher.finish('抱歉，消息被tx屏蔽…', at_sender=True)
+            if clear:
+                tmp_dict[chat_id] = None
         else:
             await matcher.finish(f'图片冷却中……请等{120 - time_passed}秒再来吧', at_sender=True)
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'

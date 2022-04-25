@@ -17,4 +17,4 @@ async def _(matcher: Matcher):
         await matcher.finish('操作完毕')
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'

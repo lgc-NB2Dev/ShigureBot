@@ -22,3 +22,6 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
 async def _(matcher: Matcher, args: Message = CommandArg()):
     ret = await get_motdpe(str(args).strip())
     await matcher.finish(ret, at_sender=True)
+
+
+__version__ = '0.1.0'

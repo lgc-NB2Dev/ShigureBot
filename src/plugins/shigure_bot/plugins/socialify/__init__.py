@@ -83,4 +83,4 @@ async def get_im(group, quiet=False, **kwargs):
         return MessageSegment.image(ret)
 
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'

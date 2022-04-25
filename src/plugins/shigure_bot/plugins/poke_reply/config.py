@@ -5,7 +5,7 @@ from typing import Literal, Optional
 from nonebot import logger
 from pydantic import BaseModel
 
-from config import BaseConfig, init
+from .._config import BaseConfig, init
 
 config = None
 
@@ -18,17 +18,17 @@ class Config(BaseConfig):
                 if i.type == 'image_folder':
                     tmp.remove(i)
                     for n in find_all_file(i.content):
-                        tmp.append(Reply(type='image', content=n, action=i.action))
+                        tmp.append(ConfigModel(type='image', content=n, action=i.action))
                 elif i.type == 'texts':
                     tmp.remove(i)
                     for n in i.content:
-                        tmp.append(Reply(type='text', content=n, action=i.action))
+                        tmp.append(ConfigModel(type='text', content=n, action=i.action))
             logger.debug(f'Parsed config: {tmp}')
             self._tmp = tmp
         return self._tmp
 
 
-class Reply(BaseModel):
+class ConfigModel(BaseModel):
     type: Literal['text', 'image', 'texts', 'image_folder']
     content: str | list[str]
     action: Optional[bool]
@@ -47,7 +47,7 @@ async def update_conf():
     global config
     config = await init(
         'poke_replies',
-        Reply,
+        ConfigModel,
         [],
         cls=Config
     )

@@ -1,4 +1,3 @@
-import base64
 from os import getcwd
 
 from aiohttp import ClientSession
@@ -13,7 +12,6 @@ def parse_dict(d: dict):
         if v is True:
             d[k] = 1
     return d
-
 
 
 async def get_cover(repo, **kwargs):
