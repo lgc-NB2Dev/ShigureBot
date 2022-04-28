@@ -2,24 +2,27 @@
 
 [![wakatime](https://wakatime.com/badge/user/b61b0f9a-f40b-4c82-bc51-0a75c67bfccf/project/c1344e53-6345-4e5f-9adc-7332f74bff44.svg)](https://wakatime.com/badge/user/b61b0f9a-f40b-4c82-bc51-0a75c67bfccf/project/c1344e53-6345-4e5f-9adc-7332f74bff44)
 
-为自己Bot写的插件集
+为自己 Bot 写的插件集
 
 ## 依赖
 
 - 需求
-    - Python `>=3.10`  
-      （由于使用了python新版本特性，python版本低于3.10将无法正常使用本项目）
-    - nonebot2 `>=2.0.0b1`
-    - More...（在`pyproject.toml`）
+  - Python `>=3.10`  
+    （由于使用了 python 新版本特性，python 版本低于 3.10 将无法正常使用本项目）
+  - nonebot2 `>=2.0.0b1`
+  - More...（在`pyproject.toml`）
 - 安装
-    - 项目使用`poetry`安装依赖，如果没有安装，请使用下面的命令安装
-      ```
-      pip install poetry
-      ```
-      在本项目`pyprojrct.toml`同目录下执行下面的命令
-      ```
-      poetry install
-      ```
+  - 项目使用`poetry`安装依赖，如果没有安装，请使用下面的命令安装
+
+    ```sh
+    pip install poetry
+    ```
+
+    在本项目`pyproject.toml`同目录下执行下面的命令
+
+    ```sh
+    poetry install
+    ```
 
 ## 使用
 
@@ -30,15 +33,22 @@
 - 通过脚手架启动（推荐）
 
   本项目依赖项内**不**包含脚手架，如果你没有安装，请使用下面的命令安装
-  ```
+
+  ```sh
   pip install nb-cli
   ```
+
   在`bot.py`所在文件夹下，执行下面的命令通过脚手架启动项目
-  ```
+
+  ```sh
   nb run
   ```
-- 直接使用`bot.py`启动 在`bot.py`所在目录下，执行下面的命令启动项目
-  ```
+
+- 直接使用`bot.py`启动
+
+  在`bot.py`所在目录下，执行下面的命令启动项目
+
+  ```sh
   python bot.py
   ```
 
