@@ -11,6 +11,7 @@ class ConfigModel(BaseModel):
     auto_allow_superusers: bool
     forward_friend_req: bool
     forward_group_invite: bool
+    auto_allow_anyone: bool
 
 
 async def update_conf():
@@ -20,7 +21,8 @@ async def update_conf():
         ConfigModel,
         {'auto_allow_superusers': True,
          'forward_friend_req'   : True,
-         'forward_group_invite' : True}
+         'forward_group_invite' : True,
+         'auto_allow_anyone'    : False}
     )
 
 
