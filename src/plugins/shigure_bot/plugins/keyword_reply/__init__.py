@@ -2,16 +2,16 @@ import random
 import re
 
 from nonebot import on_message
-from nonebot.adapters.onebot.v11 import Bot, MessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import Bot, Message, MessageEvent, MessageSegment
 from nonebot.matcher import Matcher
 
 from .config import config as conf
 
 
 async def parse_reply(reply: str, event: MessageEvent, bot: Bot):
-    return reply.format(at=MessageSegment.at(event.user_id),
-                        qq=event.user_id,
-                        nick=(await bot.get_stranger_info(user_id=event.user_id))['nickname'])
+    return Message(reply.format(at=MessageSegment.at(event.user_id),
+                                qq=event.user_id,
+                                nick=(await bot.get_stranger_info(user_id=event.user_id))['nickname']))
 
 
 @on_message(priority=99).handle()
@@ -34,4 +34,4 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher):
                 await matcher.finish(await parse_reply(random.choice(reply.replies), event, bot))
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'

@@ -7,7 +7,7 @@ from nonebot.params import ShellCommandArgs
 from nonebot.rule import ArgumentParser
 
 from .capture import get_msg
-from .._config import config
+from .config import config
 
 parser = ArgumentParser()
 parser.add_argument('url', type=str, help='URL to capture')
