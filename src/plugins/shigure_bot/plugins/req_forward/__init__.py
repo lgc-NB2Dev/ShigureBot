@@ -1,7 +1,7 @@
 import random
 import string
 
-from nonebot import on_command, on_request
+from nonebot import logger, on_command, on_request
 from nonebot.adapters.onebot.v11 import (Bot, FriendRequestEvent, GroupRequestEvent, Message, PRIVATE_FRIEND)
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg, RawCommand
@@ -67,22 +67,29 @@ async def _(bot: Bot, event: GroupRequestEvent):
                                  f'{agree_sample.format(rdm, "")}')
 
 
-@on_command(('#allow', '#refuse'), permission=SUPERUSER, rule=PRIVATE_FRIEND).handle()
+@on_command('#allow', aliases={'#refuse'}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
 async def _(bot: Bot, matcher: Matcher, cmd: str = RawCommand(), args: Message = CommandArg()):
-    rdm, ex = args.extract_plain_text().split(' ', 1)
-    req = tmp.get(rdm.strip())
+    arg = args.extract_plain_text().split(' ', 1)
+    rdm = arg[0].strip()
+    ex = arg[1].strip() if len(arg) > 1 else None
+    req = tmp.get(rdm)
     if req:
         approve = True if cmd == '#allow' else False
         approve_str = '同意' if approve else '拒绝'
-        if isinstance(req, FriendRequestEvent):
-            ex = ex.strip()
-            await bot.set_friend_add_request(flag=req.flag, approve=approve, remark=ex)
-            await matcher.send(f'已{approve_str}该好友请求' + f'，备注已设为{ex}' if ex and approve else '')
-        if isinstance(req, GroupRequestEvent):
-            await bot.set_group_add_request(flag=req.flag, sub_type=req.sub_type, approve=approve)
-            await matcher.send(f'已{approve_str}该邀请进群请求')
-    else:
-        await matcher.send('未找到该请求')
+        try:
+            if isinstance(req, FriendRequestEvent):
+                await bot.set_friend_add_request(flag=req.flag, approve=approve, remark=ex)
+                await matcher.finish(f'已{approve_str}该好友请求' + (f'，备注已设为{ex}' if ex and approve else ''))
+            elif isinstance(req, GroupRequestEvent):
+                await bot.set_group_add_request(flag=req.flag, sub_type=req.sub_type, approve=approve)
+                await matcher.finish(f'已{approve_str}该邀请进群请求')
+        except:
+            logger.exception('请求处理出错')
+            await matcher.finish('请求处理出错，请检查后台输出')
+
+        del tmp[rdm]
+
+    await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
