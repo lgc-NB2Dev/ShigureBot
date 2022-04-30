@@ -144,3 +144,4 @@ dmypy.json
 /shigure/
 /src/plugins/shigure_bot/plugins/test_plugin/
 /tests/
+/#start.txt
