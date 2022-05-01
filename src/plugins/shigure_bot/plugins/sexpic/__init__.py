@@ -48,7 +48,7 @@ async def _(event: Event, matcher: Matcher):
             if clear:
                 tmp_dict[chat_id] = None
         else:
-            await matcher.finish(f'图片冷却中……请等{120 - time_passed}秒再来吧', at_sender=True)
+            await matcher.finish(f'图片冷却中……请等{conf.delay - time_passed}秒再来吧', at_sender=True)
 
 
 __version__ = '0.1.2'
