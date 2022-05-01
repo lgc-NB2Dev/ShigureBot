@@ -2,7 +2,8 @@ import random
 import string
 
 from nonebot import logger, on_command, on_request
-from nonebot.adapters.onebot.v11 import (Bot, FriendRequestEvent, GroupRequestEvent, Message, PRIVATE_FRIEND)
+from nonebot.adapters.onebot.v11 import (ActionFailed, Bot, FriendRequestEvent, GroupRequestEvent, Message,
+                                         PRIVATE_FRIEND)
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg, RawCommand
 from nonebot.permission import SUPERUSER
@@ -83,7 +84,7 @@ async def _(bot: Bot, matcher: Matcher, cmd: str = RawCommand(), args: Message =
             elif isinstance(req, GroupRequestEvent):
                 await bot.set_group_add_request(flag=req.flag, sub_type=req.sub_type, approve=approve)
                 await matcher.finish(f'已{approve_str}该邀请进群请求')
-        except:
+        except ActionFailed:
             logger.exception('请求处理出错')
             await matcher.finish('请求处理出错，请检查后台输出')
 
@@ -92,4 +93,4 @@ async def _(bot: Bot, matcher: Matcher, cmd: str = RawCommand(), args: Message =
     await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
