@@ -80,17 +80,16 @@ async def _(bot: Bot, matcher: Matcher, cmd: str = RawCommand(), args: Message =
         try:
             if isinstance(req, FriendRequestEvent):
                 await bot.set_friend_add_request(flag=req.flag, approve=approve, remark=ex)
-                await matcher.finish(f'已{approve_str}该好友请求' + (f'，备注已设为{ex}' if ex and approve else ''))
+                await matcher.send(f'已{approve_str}该好友请求' + (f'，备注已设为{ex}' if ex and approve else ''))
             elif isinstance(req, GroupRequestEvent):
                 await bot.set_group_add_request(flag=req.flag, sub_type=req.sub_type, approve=approve)
-                await matcher.finish(f'已{approve_str}该邀请进群请求')
+                await matcher.send(f'已{approve_str}该邀请进群请求')
         except ActionFailed:
             logger.exception('请求处理出错')
             await matcher.finish('请求处理出错，请检查后台输出')
-
-        del tmp[rdm]
-
-    await matcher.finish('未找到该请求')
+        tmp.pop(rdm)
+    else:
+        await matcher.finish('未找到该请求')
 
 
 __version__ = '1.0.3'
