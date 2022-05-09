@@ -21,8 +21,9 @@ jieba = "^0.42.1"
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"
 
-[nonebot.plugins]
-plugins = []
+
+[tool.nonebot]
+plugins = ["nonebot_plugin_guild_patch"]
 plugin_dirs = ["src/plugins"]
 
 [build-system]
