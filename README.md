@@ -28,14 +28,14 @@
 
 ### 整个项目
 
+#### 使用项目`bot.py`启动
+
 请先按照下面的方法修改项目`.env`文件
 
 ```diff
 -ENVIRONMENT=dev
 +ENVIRONMENT=prod
 ```
-
-#### 使用项目`bot.py`启动
 
 - 通过脚手架启动（推荐）
 
