@@ -8,15 +8,15 @@ config = None
 
 
 class ConfigModel(BaseModel):
-    ignore_sites: list[str]
+    send_link: bool
 
 
 async def update_conf():
     global config
     config = await init(
-        'website_capture',
+        'hitokoto',
         ConfigModel,
-        {'ignore_sites': ['xvideos.com', 'pornhub.com']}
+        {'send_link': True}
     )
 
 

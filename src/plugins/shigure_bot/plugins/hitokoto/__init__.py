@@ -4,6 +4,8 @@ from nonebot.adapters.onebot.v11 import Message
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg
 
+from .config import config
+
 hito_types = {
     '动画'  : 'a',
     '漫画'  : 'b',
@@ -48,8 +50,8 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     else:
         who = ret['from_who']
         await matcher.finish(f'『{ret["hitokoto"]}』\n'
-                             f'—— {who if who else ""}「{ret["from"]}」\n'
-                             f'(https://hitokoto.cn?uuid={ret["uuid"]})')
+                             f'—— {who if who else ""}「{ret["from"]}」' +
+                             (f'\n(https://hitokoto.cn?uuid={ret["uuid"]})' if config.send_link else ''))
 
 
 __version__ = '0.1.0'
