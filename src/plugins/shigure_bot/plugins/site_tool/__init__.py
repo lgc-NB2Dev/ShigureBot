@@ -180,7 +180,8 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
         await get_api_resp('SPing', {'ip': ip, 'num': node_num}),
         lambda ret: '\n'.join(
             ['节点名 | IP | 平均延迟 | TTL'] +
-            [f'{x["node"]} | {x["ip"]} | {x["ping_avg"]}ms | {x["ttl"]}' for x in ret]
+            [f'{x["node"]} | {x["ip"]} | {f"{avg}ms" if (avg := x["ping_avg"]).isdigit() else avg} | {x["ttl"]}'
+             for x in ret]
         )
     ), at_sender=True)
 
@@ -203,4 +204,4 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     ), at_sender=True)
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
