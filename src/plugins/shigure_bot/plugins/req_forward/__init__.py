@@ -21,7 +21,7 @@ def get_random_str(length: int = 6):
     return ''.join(random.sample(f'{string.ascii_letters}{string.digits}', length))
 
 
-async def send_to_all_admins(bot, msg, excepts=None):
+async def send_to_all_admins(bot: Bot, msg, excepts=None):
     if not excepts:
         excepts = []
     for su in bot.config.superusers:
@@ -30,12 +30,20 @@ async def send_to_all_admins(bot, msg, excepts=None):
             await bot.send_private_msg(user_id=su, message=msg)
 
 
-async def get_stranger_name(bot, qq):
-    return await bot.get_stranger_info(qq)['nickname']
+async def get_stranger_name(bot: Bot, qq):
+    return (await bot.get_stranger_info(user_id=qq))['nickname']
 
 
-async def get_group_name(bot, group_id):
-    return await bot.get_group_info(group_id)['group_name']
+async def get_group_name(bot: Bot, group_id):
+    return (await bot.get_group_info(group_id=group_id))['group_name']
+
+
+async def approve(ev, bot):
+    try:
+        ev.approve(bot)
+    except ActionFailed as e:
+        return e
+    return None
 
 
 @on_request().handle()
@@ -45,12 +53,16 @@ async def _(bot: Bot, event: FriendRequestEvent):
               f'验证信息：{event.comment}')
 
     if str(event.user_id) in bot.config.superusers and config.auto_allow_superusers:
-        await event.approve(bot)
-        await bot.send_private_msg(user_id=event.user_id, message='已同意您的好友请求')
+        if not (e := await approve(event, bot)):
+            await bot.send_private_msg(user_id=event.user_id, message='已同意您的好友请求')
+        else:
+            await bot.send_private_msg(user_id=event.user_id, message=f'自动同意请求失败：{e.info["wording"]}')
 
     elif config.auto_allow_anyone:
-        await event.approve(bot)
-        await send_to_all_admins(bot, sample.replace('\n', '，已自动同意\n', 1))
+        if not (e := await approve(event, bot)):
+            await send_to_all_admins(bot, sample.replace('\n', '，已自动同意\n', 1))
+        else:
+            await send_to_all_admins(bot, sample.replace('\n', f'，自动同意失败：{e.info["wording"]}\n', 1))
 
     elif config.forward_friend_req:
         if tmp.setitem(rdm := get_random_str(), event):
@@ -70,12 +82,16 @@ async def _(bot: Bot, event: GroupRequestEvent):
     sample = f'用户 {username}({event.user_id}) 邀请我进群 {group_name}({event.group_id})'
 
     if str(event.user_id) in bot.config.superusers and config.auto_allow_superusers:
-        await event.approve(bot)
-        await bot.send_private_msg(user_id=event.user_id, message='已同意您的邀请进群请求')
+        if not (e := await approve(event, bot)):
+            await bot.send_private_msg(user_id=event.user_id, message='已自动同意您的邀请进群请求')
+        else:
+            await bot.send_private_msg(user_id=event.user_id, message=f'自动同意请求失败：{e.info["wording"]}')
 
     elif config.auto_allow_anyone:
-        await event.approve(bot)
-        await send_to_all_admins(bot, f'{sample}，已自动同意')
+        if not (e := await approve(event, bot)):
+            await send_to_all_admins(bot, f'{sample}，已自动同意')
+        else:
+            await send_to_all_admins(bot, f'{sample}，自动同意失败：{e.info["wording"]}')
 
     elif config.forward_group_invite:
         if tmp.setitem(rdm := get_random_str(), event):
@@ -118,4 +134,4 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'
