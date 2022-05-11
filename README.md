@@ -1,6 +1,7 @@
 # ShigureBot
 
 [![wakatime](https://wakatime.com/badge/user/b61b0f9a-f40b-4c82-bc51-0a75c67bfccf/project/c1344e53-6345-4e5f-9adc-7332f74bff44.svg)](https://wakatime.com/badge/user/b61b0f9a-f40b-4c82-bc51-0a75c67bfccf/project/c1344e53-6345-4e5f-9adc-7332f74bff44)
+[![CodeFactor](https://www.codefactor.io/repository/github/lgc2333/shigurebot/badge)](https://www.codefactor.io/repository/github/lgc2333/shigurebot)
 
 为自己 Bot 写的插件集
 

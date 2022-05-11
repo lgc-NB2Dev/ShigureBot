@@ -51,4 +51,4 @@ async def _(event: Event, matcher: Matcher):
             await matcher.finish(f'图片冷却中……请等{conf.delay - time_passed}秒再来吧', at_sender=True)
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'

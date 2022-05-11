@@ -55,7 +55,7 @@ def format_json_time(t):
     ).strftime('%Y-%m-%d %H:%M:%S (%Z)')
 
 
-@on_command('二维码解析', aliases={'解析二维码'}).handle()
+@on_command('二维码解析', aliases={'解析二维码', '二维码识别', '识别二维码'}).handle()
 @error_handle()
 async def _(matcher: Matcher, event: MessageEvent, args: Message = CommandArg()):
     if img := args['image']:
@@ -161,7 +161,31 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     ), at_sender=True)
 
 
-@on_command('whois查询', aliases={'Whois查询', 'WHOIS查询'}).handle()
+@on_command('sping', aliases={'Sping', 'SPing', 'SPING'}).handle()
+@error_handle()
+async def _(matcher: Matcher, args: Message = CommandArg()):
+    if not (arg := args.extract_plain_text()):
+        await matcher.finish('请输入域名')
+
+    arg = arg.split(' ', 1)
+    ip = arg[0]
+    node_num = 10
+    if len(arg) > 1:
+        if arg[1].isdigit() and (nn := int(arg[1])) > 0:
+            node_num = nn
+        else:
+            await matcher.finish('请输入有效的节点数量')
+
+    await matcher.finish(format_return(
+        await get_api_resp('SPing', {'ip': ip, 'num': node_num}),
+        lambda ret: '\n'.join(
+            ['节点名 | IP | 平均延迟 | TTL'] +
+            [f'{x["node"]} | {x["ip"]} | {x["ping_avg"]}ms | {x["ttl"]}' for x in ret]
+        )
+    ), at_sender=True)
+
+
+@on_command('whois查询', aliases={'Whois查询', 'WhoIs查询', 'WHOIS查询'}).handle()
 @error_handle()
 async def _(matcher: Matcher, args: Message = CommandArg()):
     if not (arg := args.extract_plain_text()):
@@ -179,4 +203,4 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     ), at_sender=True)
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
