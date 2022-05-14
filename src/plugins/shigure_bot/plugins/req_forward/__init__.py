@@ -1,8 +1,10 @@
 import random
 import string
 
-from nonebot import logger, on_command, on_request
-from nonebot.adapters.onebot.v11 import (ActionFailed, Bot, FriendRequestEvent, GroupRequestEvent, Message,
+from nonebot import logger, on_command, on_notice, on_request
+from nonebot.adapters.onebot.v11 import (ActionFailed, Bot, FriendAddNoticeEvent, FriendRequestEvent,
+                                         GroupIncreaseNoticeEvent, GroupRequestEvent,
+                                         Message,
                                          MessageEvent, PRIVATE_FRIEND)
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg, RawCommand
@@ -33,16 +35,22 @@ async def send_to_all_admins(bot: Bot, msg, excepts=None):
 
 
 async def get_stranger_name(bot: Bot, qq):
-    return (await bot.get_stranger_info(user_id=qq))['nickname']
+    try:
+        return (await bot.get_stranger_info(user_id=qq))['nickname']
+    except ActionFailed:
+        return '未知'
 
 
 async def get_group_name(bot: Bot, group_id):
-    return (await bot.get_group_info(group_id=group_id))['group_name']
+    try:
+        return (await bot.get_group_info(group_id=group_id))['group_name']
+    except ActionFailed:
+        return '未知'
 
 
 async def approve(ev, bot):
     try:
-        ev.approve(bot)
+        await ev.approve(bot)
     except ActionFailed as e:
         return e
     return None
@@ -73,11 +81,7 @@ async def _(bot: Bot, event: FriendRequestEvent):
                                      f'{agree_sample.format(rdm, " [备注]")}')
 
 
-def group_invite_rule(e: GroupRequestEvent):
-    return e.sub_type == 'invite'
-
-
-@on_request(rule=group_invite_rule).handle()
+@on_request(rule=lambda event: event.sub_type == 'invite').handle()
 async def _(bot: Bot, event: GroupRequestEvent):
     username = await get_stranger_name(bot, event.user_id)
     group_name = await get_group_name(bot, event.group_id)
@@ -100,6 +104,18 @@ async def _(bot: Bot, event: GroupRequestEvent):
             await send_to_all_admins(bot,
                                      f'{sample}\n'
                                      f'{agree_sample.format(rdm, "")}')
+
+
+@on_notice(block=False).handle()
+async def _(bot: Bot, event: GroupIncreaseNoticeEvent):
+    if event.is_tome() and config.send_addition_notice:
+        await send_to_all_admins(bot, f'新添加群 {await get_group_name(bot, event.group_id)}({event.group_id})')
+
+
+@on_notice(block=False).handle()
+async def _(bot: Bot, event: FriendAddNoticeEvent):
+    if config.send_addition_notice:
+        await send_to_all_admins(bot, f'新添加好友 {await get_stranger_name(bot, event.user_id)}({event.user_id})')
 
 
 @on_command(allow_cmd, aliases={refuse_cmd}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
@@ -130,9 +146,9 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         except ActionFailed:
             logger.exception('请求处理出错')
             await matcher.finish('请求处理出错，请检查后台输出')
-        tmp.pop(rdm)
+        tmp.pop()
     else:
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.8'
+__version__ = '1.0.9'

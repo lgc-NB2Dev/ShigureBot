@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ShigureBot"
-version = "0.3.2"
+version = "0.3.3"
 description = "Kawaii no Shigure Bot~"
 authors = ["student_2333 <lgc2333@126.com>"]
 license = "LGPL-2.1"

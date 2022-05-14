@@ -9,4 +9,4 @@ path = str((Path(__file__).parent / "plugins").
 _sub = set()
 _sub |= load_plugins(path)
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
