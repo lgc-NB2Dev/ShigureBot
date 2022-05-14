@@ -14,8 +14,8 @@ from .config import config
 allow_cmd = 'allow'
 refuse_cmd = 'refuse'
 agree_sample = ('-=-=-=-=-=-=-=-\n'
-                f'同意请求：{allow_cmd} {0}{1}\n'
-                f'拒绝请求：{refuse_cmd} {0}')
+                f'同意请求：{allow_cmd} {{0}}{{1}}\n'
+                f'拒绝请求：{refuse_cmd} {{0}}')
 tmp = ReqDict()
 
 
