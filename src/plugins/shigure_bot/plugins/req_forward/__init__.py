@@ -104,28 +104,28 @@ async def _(bot: Bot, event: GroupRequestEvent):
 
 @on_command(allow_cmd, aliases={refuse_cmd}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
 async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawCommand(), args: Message = CommandArg()):
-    async def send_to_all_admins_except_sender(msg):
-        await send_to_all_admins(bot, msg[event.sender.user_id])
+    async def process(ev, act):
+        if act:
+            await ev.approve(bot)
+        else:
+            await ev.reject(bot)
 
     arg = args.extract_plain_text().split(' ', 1)
     rdm = arg[0].strip()
     ex = arg[1].strip() if len(arg) > 1 else None
 
     if req := tmp.get(rdm):
-        approve_str = '同意' if (is_approve := (cmd == '#allow')) else '拒绝'
+        approve_str = '同意' if (is_approve := (cmd == allow_cmd)) else '拒绝'
         tip_sample = f'管理员 {event.sender.nickname}({event.sender.user_id}) 已{approve_str}'
 
         try:
-            if isinstance(req, FriendRequestEvent):
-                await req.approve(bot)
-                await matcher.send(f'已{approve_str}该好友请求'
-                                   f'{(remark_tip := (f"，备注已设为{ex}" if ex and is_approve else ""))}')
-                await send_to_all_admins_except_sender(f'{tip_sample}好友请求"{rdm}"{remark_tip}')
-
-            elif isinstance(req, GroupRequestEvent):
-                await req.approve(bot)
-                await matcher.send(f'已{approve_str}该邀请进群请求')
-                await send_to_all_admins_except_sender(f'{tip_sample}邀请进群请求"{rdm}"')
+            await process(req, is_approve)
+            req_name = '好友' if isinstance(req, FriendRequestEvent) else '邀请进群'
+            await matcher.send(f'已{approve_str}该{req_name}请求'
+                               f'{(remark_tip := (f"，备注已设为{ex}" if ex and is_approve else ""))}')
+            await send_to_all_admins(bot,
+                                     f'{tip_sample}{req_name}请求"{rdm}"{remark_tip}',
+                                     [event.sender.user_id])
 
         except ActionFailed:
             logger.exception('请求处理出错')
@@ -135,4 +135,4 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'
