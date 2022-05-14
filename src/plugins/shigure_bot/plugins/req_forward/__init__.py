@@ -11,9 +11,11 @@ from nonebot.permission import SUPERUSER
 from .abc import ReqDict
 from .config import config
 
+allow_cmd = 'allow'
+refuse_cmd = 'refuse'
 agree_sample = ('-=-=-=-=-=-=-=-\n'
-                '同意请求：#allow {0}{1}\n'
-                '拒绝请求：#refuse {0}')
+                f'同意请求：{allow_cmd} {0}{1}\n'
+                f'拒绝请求：{refuse_cmd} {0}')
 tmp = ReqDict()
 
 
@@ -100,25 +102,24 @@ async def _(bot: Bot, event: GroupRequestEvent):
                                      f'{agree_sample.format(rdm, "")}')
 
 
-@on_command('#allow', aliases={'#refuse'}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
+@on_command(allow_cmd, aliases={refuse_cmd}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
 async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawCommand(), args: Message = CommandArg()):
     async def send_to_all_admins_except_sender(msg):
-        await send_to_all_admins(bot, msg[event.sender])
+        await send_to_all_admins(bot, msg[event.sender.user_id])
 
     arg = args.extract_plain_text().split(' ', 1)
     rdm = arg[0].strip()
     ex = arg[1].strip() if len(arg) > 1 else None
-    admin_name = await get_stranger_name(bot, event.sender)
 
     if req := tmp.get(rdm):
-        approve_str = '同意' if (approve := (cmd == '#allow')) else '拒绝'
-        tip_sample = f'管理员 {admin_name}({event.sender}) 已{approve_str}'
+        approve_str = '同意' if (is_approve := (cmd == '#allow')) else '拒绝'
+        tip_sample = f'管理员 {event.sender.nickname}({event.sender.user_id}) 已{approve_str}'
 
         try:
             if isinstance(req, FriendRequestEvent):
                 await req.approve(bot)
                 await matcher.send(f'已{approve_str}该好友请求'
-                                   f'{(remark_tip := (f"，备注已设为{ex}" if ex and approve else ""))}')
+                                   f'{(remark_tip := (f"，备注已设为{ex}" if ex and is_approve else ""))}')
                 await send_to_all_admins_except_sender(f'{tip_sample}好友请求"{rdm}"{remark_tip}')
 
             elif isinstance(req, GroupRequestEvent):
@@ -134,4 +135,4 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.6'
+__version__ = '1.0.7'
