@@ -24,4 +24,4 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     await matcher.finish(ret, at_sender=True)
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'

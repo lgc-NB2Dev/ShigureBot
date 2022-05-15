@@ -3,14 +3,12 @@ import string
 
 from nonebot import logger, on_command, on_notice, on_request
 from nonebot.adapters.onebot.v11 import (ActionFailed, Bot, FriendAddNoticeEvent, FriendRequestEvent,
-                                         GroupIncreaseNoticeEvent, GroupRequestEvent,
-                                         Message,
-                                         MessageEvent, PRIVATE_FRIEND)
+                                         GroupDecreaseNoticeEvent, GroupIncreaseNoticeEvent, GroupRequestEvent,
+                                         Message,MessageEvent, PRIVATE_FRIEND)
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg, RawCommand
 from nonebot.permission import SUPERUSER
 
-from .abc import ReqDict
 from .config import config
 
 allow_cmd = 'allow'
@@ -18,7 +16,7 @@ refuse_cmd = 'refuse'
 agree_sample = ('-=-=-=-=-=-=-=-\n'
                 f'同意请求：{allow_cmd} {{0}}{{1}}\n'
                 f'拒绝请求：{refuse_cmd} {{0}}')
-tmp = ReqDict()
+tmp = dict()
 
 
 def get_random_str(length: int = 6):
@@ -31,7 +29,11 @@ async def send_to_all_admins(bot: Bot, msg, excepts=None):
     for su in bot.config.superusers:
         su = int(su)
         if su not in excepts:
-            await bot.send_private_msg(user_id=su, message=msg)
+            try:
+                await bot.send_private_msg(user_id=su, message=msg)
+            except:
+                logger.exception('发送消息失败')
+                pass
 
 
 async def get_stranger_name(bot: Bot, qq):
@@ -75,10 +77,10 @@ async def _(bot: Bot, event: FriendRequestEvent):
             await send_to_all_admins(bot, sample.replace('\n', f'，自动同意失败：{e.info["wording"]}\n', 1))
 
     elif config.forward_friend_req:
-        if tmp.setitem(rdm := get_random_str(), event):
-            await send_to_all_admins(bot,
-                                     f'{sample}\n'
-                                     f'{agree_sample.format(rdm, " [备注]")}')
+        tmp[rdm := get_random_str()] = event
+        await send_to_all_admins(bot,
+                                 f'{sample}\n'
+                                 f'{agree_sample.format(rdm, " [备注]")}')
 
 
 @on_request(rule=lambda event: event.sub_type == 'invite').handle()
@@ -100,16 +102,23 @@ async def _(bot: Bot, event: GroupRequestEvent):
             await send_to_all_admins(bot, f'{sample}，自动同意失败：{e.info["wording"]}')
 
     elif config.forward_group_invite:
-        if tmp.setitem(rdm := get_random_str(), event):
-            await send_to_all_admins(bot,
-                                     f'{sample}\n'
-                                     f'{agree_sample.format(rdm, "")}')
+        tmp[rdm := get_random_str()] = event
+        await send_to_all_admins(bot,
+                                 f'{sample}\n'
+                                 f'{agree_sample.format(rdm, "")}')
 
 
 @on_notice(block=False).handle()
 async def _(bot: Bot, event: GroupIncreaseNoticeEvent):
     if event.is_tome() and config.send_addition_notice:
         await send_to_all_admins(bot, f'新添加群 {await get_group_name(bot, event.group_id)}({event.group_id})')
+
+
+@on_notice(block=False).handle()
+async def _(bot: Bot, event: GroupDecreaseNoticeEvent):
+    if event.is_tome() and config.send_leave_notice:
+        action_name = '主动退出' if event.sub_type == 'leave' else '被踢出'
+        await send_to_all_admins(bot, f'{action_name}群 {await get_group_name(bot, event.group_id)}({event.group_id})')
 
 
 @on_notice(block=False).handle()
@@ -146,9 +155,9 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         except ActionFailed:
             logger.exception('请求处理出错')
             await matcher.finish('请求处理出错，请检查后台输出')
-        tmp.pop()
+        tmp.pop(rdm)
     else:
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.0.9'
+__version__ = '1.1.0'

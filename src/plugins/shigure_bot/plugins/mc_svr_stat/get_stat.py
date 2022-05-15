@@ -38,7 +38,7 @@ async def motd(address: str, full=False):
         ret = ret.raw
     except Exception as e:
         nonebot.logger.opt(colors=True, exception=e).error('')
-        return MessageSegment.text(f'[MCJE服务器信息]\n操作失败：{e}')
+        return MessageSegment.text(f'[MCJE服务器信息]\n操作失败：{e!r}')
 
     pic_text = ''
     if 'favicon' in ret:
@@ -102,7 +102,7 @@ async def motdpe(address: str):
         ret = await ret.async_status()
     except Exception as e:
         nonebot.logger.opt(colors=True, exception=e).error('')
-        return MessageSegment.text(f'[MCBE服务器信息]\n操作失败：{e}')
+        return MessageSegment.text(f'[MCBE服务器信息]\n操作失败：{e!r}')
 
     map_name = f'存档名称：{del_escape(ret.map)}\n' if ret.map else ''
     game_mode = f'游戏模式：{ret.gamemode}\n' if ret.gamemode else ''

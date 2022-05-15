@@ -13,6 +13,7 @@ class ConfigModel(BaseModel):
     forward_group_invite: bool
     auto_allow_anyone: bool
     send_addition_notice: bool
+    send_leave_notice: bool
 
 
 async def update_conf():
@@ -20,11 +21,12 @@ async def update_conf():
     config = await init(
         'req_foward',
         ConfigModel,
-        {'auto_allow_superusers' : True,
-         'forward_friend_req'    : True,
-         'forward_group_invite'  : True,
-         'auto_allow_anyone'     : False,
-         'send_addition_notice': True}
+        {'auto_allow_superusers': True,
+         'forward_friend_req'   : True,
+         'forward_group_invite' : True,
+         'auto_allow_anyone'    : False,
+         'send_addition_notice' : True,
+         'send_leave_notice'    : True}
     )
 
 
