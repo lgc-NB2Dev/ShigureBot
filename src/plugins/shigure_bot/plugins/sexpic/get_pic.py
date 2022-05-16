@@ -4,7 +4,7 @@ from nonebot.adapters.onebot.v11 import MessageSegment
 from .config import config
 
 
-async def get_pic(tag=''):
+async def get_pic(sender, tag=''):
     tag = tag.split(',')
     if len(tag) > 3:
         return 'and规则的tag匹配数不能超过3个', True
@@ -37,9 +37,12 @@ async def get_pic(tag=''):
     except:
         return '图片获取失败', True
 
-    detail = (f'\n奉上涩图一张~\n'
-              f'PID：{ret["pid"]}\n'
-              f'标题：{ret["title"]}\n'
-              f'作者：{ret["author"]}\n'
-              f'标签：{"；".join(ret["tags"])}')
-    return MessageSegment.image(pic) + detail, False
+    im = MessageSegment.image(pic)
+    if config.send_details:
+        im = MessageSegment.at(sender) + im + (
+            f'\n奉上涩图一张~\n'
+            f'PID：{ret["pid"]}\n'
+            f'标题：{ret["title"]}\n'
+            f'作者：{ret["author"]}\n'
+            f'标签：{"；".join(ret["tags"])}')
+    return im, False

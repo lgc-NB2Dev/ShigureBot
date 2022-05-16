@@ -152,12 +152,12 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
                                      f'{tip_sample}{req_name}请求"{rdm}"{remark_tip}',
                                      [event.sender.user_id])
 
-        except ActionFailed:
-            logger.exception('请求处理出错')
-            await matcher.finish('请求处理出错，请检查后台输出')
+        except ActionFailed as e:
+            logger.opt(exception=e).exception('请求处理出错')
+            await matcher.finish(f'请求处理出错：{e.info["wording"]}')
         tmp.pop(rdm)
     else:
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
