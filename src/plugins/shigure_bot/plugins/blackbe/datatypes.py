@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from nonebot.adapters.onebot.v11 import Message
 from pydantic import BaseModel
 
 
@@ -67,3 +68,31 @@ class BlackBEReturn(BaseModel):
           BlackBEReturnRepoList | \
           BlackBEReturnDataFullInfo | \
           List[None]
+
+
+class ForwardMsg(list[Message]):
+    def append(self, obj):
+        super(ForwardMsg, self).append(Message(obj))
+
+    def extend(self, iterable):
+        for i in iterable:
+            self.append(i)
+
+    def get_msg(self, sender_name, sender_uin):
+        return [
+            {
+                "type": "node",
+                "data": {
+                    "name"   : sender_name,
+                    "uin"    : sender_uin,
+                    "content": [
+                        {
+                            'type': y.type,
+                            'data': y.data
+                        }
+                        for y in x
+                    ]
+                }
+            }
+            for x in self
+        ]

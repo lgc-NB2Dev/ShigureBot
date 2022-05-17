@@ -1,5 +1,4 @@
 import asyncio
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -9,8 +8,9 @@ config = None
 
 
 class ConfigModel(BaseModel):
-    token: Optional[str] = ''
-    ignore_repos: Optional[list[Optional[str]]] = []
+    token: str
+    ignore_repos: list[str]
+    use_group_forward_msg: bool
 
 
 async def update_conf():
@@ -18,7 +18,9 @@ async def update_conf():
     config = await init(
         'blackbe',
         ConfigModel,
-        {'token': '', 'ignore_repos': []}
+        {'token'                : '',
+         'ignore_repos'         : [],
+         'use_group_forward_msg': True}
     )
 
 

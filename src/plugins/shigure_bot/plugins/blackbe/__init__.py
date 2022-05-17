@@ -1,12 +1,12 @@
 from nonebot import on_command, on_message, require
-from nonebot.adapters.onebot.v11 import Event, Message
+from nonebot.adapters.onebot.v11 import Bot, Event, Message, MessageEvent
 from nonebot.matcher import Matcher
 from nonebot.params import CommandArg
 
 from .config import config as conf
 from .datatypes import BlackBEReturn
 from .get_data import get_simple_info
-from .get_msg import get_info_msg
+from .get_msg import get_info_msg_pic, send_info_msg
 from .utils import list_has_same_item
 
 base_ret = {
@@ -29,18 +29,14 @@ async def delete_temp():
 
 
 @on_command('查云黑').handle()
-async def _(matcher: Matcher, args: Message = CommandArg()):
-    at = args['at']
-    if at:
-        ret = await get_info_msg(qq=at[0].data['qq'])
+async def _(bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = CommandArg()):
+    if at := args['at']:
+        await send_info_msg(bot, event, qq=at[0].data['qq'])
     else:
-        msg = str(args).strip()
-        if not msg:
-            ret = '指令格式：查云黑<XboxID/QQ号/@某人/XUID>'
+        if not (msg := args.extract_plain_text().strip()):
+            await matcher.finish(' \n指令格式：查云黑<XboxID/QQ号/@某人/XUID>', at_sender=True)
         else:
-            ret = await get_info_msg(name=msg, qq=msg, xuid=msg)
-
-    await matcher.finish('\n' + ret, at_sender=True)
+            await send_info_msg(bot, event, name=msg, qq=msg, xuid=msg)
 
 
 @on_message(block=False).handle()
@@ -67,4 +63,4 @@ async def _(event: Event, matcher: Matcher):
                     temp[f'{event.group_id}.{event.user_id}'] = True
 
 
-__version__ = '1.1.2'
+__version__ = '1.2.0'
