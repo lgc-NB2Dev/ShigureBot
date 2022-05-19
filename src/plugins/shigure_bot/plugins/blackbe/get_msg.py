@@ -95,20 +95,21 @@ async def parse_info_group_forward(info: BlackBEReturnDataInfo, uuid=''):
         pics.append(await get_img_msg(full_path, photo))
 
     im = ForwardMsg()
-    im.append(f'玩家ID：{info.name}\n')
-    im.append(f'危险等级：{parse_lvl(info.level)}\n')
-    im.append(f'记录原因：{info.info}\n')
+    im.append(f'玩家ID：{info.name}')
+    im.append(f'危险等级：{parse_lvl(info.level)}')
+    im.append(f'记录原因：{info.info}')
     if info.server:
-        im.append(f'违规服务器：{info.server}\n')
-    im.append(f'XUID：{info.xuid}\n')
-    im.append(f'玩家QQ：{info.qq}\n')
+        im.append(f'违规服务器：{info.server}')
+    im.append(f'XUID：{info.xuid}')
+    im.append(f'玩家QQ：{info.qq}')
     if info.phone:
-        im.append(f'玩家电话：{info.area_code} {info.phone}\n')
-    im.append(f'库来源：{repo_name}\n')
+        im.append(f'玩家电话：{info.area_code} {info.phone}')
+    im.append(f'库来源：{repo_name}')
     if info.time:
-        im.append(f'记录时间：{info.time}\n')
+        im.append(f'记录时间：{info.time}')
     im.append(f'记录UUID：{info.uuid}')
     if pics:
+        im.append('以下是证据截图：')
         im.extend(pics)
     return im
 
@@ -188,7 +189,7 @@ async def get_info_msg_pic(**kwargs):
 
 
 async def send_group_forward_msg(bot: Bot, ev, **kwargs):
-    def get_msg(im: ForwardMsg):
+    async def get_msg(im: ForwardMsg):
         return im.get_msg((await bot.get_login_info())['nickname'], bot.self_id)
 
     ret_simple = await get_simple_info(**kwargs)
@@ -204,7 +205,7 @@ async def send_group_forward_msg(bot: Bot, ev, **kwargs):
             if ret_simple.data.exist:
                 tip_success.append(f' {len(ret_simple.data.info)} 条公有库记录')
                 for i in ret_simple.data.info:
-                    info.append(get_msg(await parse_info_group_forward(i)))
+                    info.append(await get_msg(await parse_info_group_forward(i)))
         else:
             tip_fail.append(f'查询公有库记录失败：[{ret_simple.status}] {ret_simple.message}')
     else:
@@ -216,7 +217,7 @@ async def send_group_forward_msg(bot: Bot, ev, **kwargs):
                 count = 0
                 for i in ret_repo.data:
                     for n in i.info:
-                        info.append(get_msg(await parse_info_group_forward(n, i.repo_uuid)))
+                        info.append(await get_msg(await parse_info_group_forward(n, i.repo_uuid)))
                         count += 1
                 if count:
                     tip_success.append(f' {len(ret_repo.data)} 个私有库的 {count} 条私有库记录')

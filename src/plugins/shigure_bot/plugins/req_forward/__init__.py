@@ -66,7 +66,7 @@ async def _(bot: Bot, event: FriendRequestEvent):
 
     if str(event.user_id) in bot.config.superusers and config.auto_allow_superusers:
         if not (e := await approve(event, bot)):
-            await bot.send_private_msg(user_id=event.user_id, message='已同意您的好友请求')
+            await bot.send_private_msg(user_id=event.user_id, message='已自动同意您的好友请求')
         else:
             await bot.send_private_msg(user_id=event.user_id, message=f'自动同意请求失败：{e.info["wording"]}')
 
@@ -160,4 +160,4 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'

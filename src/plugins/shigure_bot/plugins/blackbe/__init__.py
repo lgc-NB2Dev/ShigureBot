@@ -63,4 +63,4 @@ async def _(event: Event, matcher: Matcher):
                     temp[f'{event.group_id}.{event.user_id}'] = True
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
