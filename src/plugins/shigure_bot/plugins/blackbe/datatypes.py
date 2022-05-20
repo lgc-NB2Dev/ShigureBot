@@ -63,11 +63,11 @@ class BlackBEReturn(BaseModel):
     version: str
     codename: str
     time: str
-    data: BlackBEReturnData | \
-          List[BlackBEReturnData] | \
-          BlackBEReturnRepoList | \
-          BlackBEReturnDataFullInfo | \
-          List[None]
+    data: (BlackBEReturnData |
+           List[BlackBEReturnData] |
+           BlackBEReturnRepoList |
+           BlackBEReturnDataFullInfo |
+           List[None])
 
 
 class ForwardMsg(list[Message]):
