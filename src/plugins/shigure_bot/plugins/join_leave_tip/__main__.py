@@ -14,13 +14,13 @@ async def parse_reply(reply: str, event: GroupIncreaseNoticeEvent | GroupDecreas
 
 @on_notice(block=False).handle()
 async def _(bot: Bot, matcher: Matcher, event: GroupIncreaseNoticeEvent):
-    if not event.is_tome():
+    if not event.is_tome() or event.group_id in config.except_groups:
         await matcher.finish(await parse_reply(config.join_message, event, bot))
 
 
 @on_notice(block=False).handle()
 async def _(bot: Bot, matcher: Matcher, event: GroupDecreaseNoticeEvent):
-    if not event.is_tome():
+    if not event.is_tome() or event.group_id in config.except_groups:
         match event.sub_type:
             case 'leave':
                 await matcher.finish(await parse_reply(config.leave_message, event, bot))
@@ -28,4 +28,4 @@ async def _(bot: Bot, matcher: Matcher, event: GroupDecreaseNoticeEvent):
                 await matcher.finish(await parse_reply(config.kick_message, event, bot))
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'

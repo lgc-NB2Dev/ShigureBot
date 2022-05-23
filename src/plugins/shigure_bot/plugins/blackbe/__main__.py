@@ -46,4 +46,4 @@ async def _(event: GroupMessageEvent, matcher: Matcher):
                 detect.set_notice_stat(event.group_id, event.user_id, True)
 
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'

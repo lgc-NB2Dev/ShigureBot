@@ -11,6 +11,7 @@ class ConfigModel(BaseModel):
     join_message: str
     leave_message: str
     kick_message: str
+    except_groups: list[int]
 
 
 async def update_conf():
@@ -20,7 +21,8 @@ async def update_conf():
         ConfigModel,
         {'join_message' : '{at} 欢迎新入群的rbq~',
          'leave_message': '{nick}({qq})默默地离开了我们……',
-         'kick_message' : '{nick}({qq})被至高无上的管理员{admin}制裁了！！（躲'}
+         'kick_message' : '{nick}({qq})被至高无上的管理员{admin}制裁了！！（躲',
+         'except_groups': []}
     )
 
 

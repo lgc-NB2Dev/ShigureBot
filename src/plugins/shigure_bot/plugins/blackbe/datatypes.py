@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from nonebot.adapters.onebot.v11 import Message
+from nonebot.adapters.onebot.v11 import Message, MessageSegment
 from pydantic import BaseModel
 
 
@@ -72,7 +72,8 @@ class BlackBEReturn(BaseModel):
 
 class ForwardMsg(list[Message]):
     def append(self, obj):
-        super(ForwardMsg, self).append(Message(obj))
+        super(ForwardMsg, self).append(
+            MessageSegment.text(obj) if isinstance(obj, str) else Message(obj))
 
     def extend(self, iterable):
         for i in iterable:
