@@ -73,7 +73,7 @@ class BlackBEReturn(BaseModel):
 class ForwardMsg(list[Message]):
     def append(self, obj):
         super(ForwardMsg, self).append(
-            MessageSegment.text(obj) if isinstance(obj, str) else Message(obj))
+            Message(MessageSegment.text(obj) if isinstance(obj, str) else obj))
 
     def extend(self, iterable):
         for i in iterable:
