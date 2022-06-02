@@ -1,5 +1,5 @@
 import asyncio
-from typing import List
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 
@@ -9,10 +9,11 @@ config = None
 
 
 class ConfigModel(BaseModel):
-    type: str
-    to_me: bool
-    keywords: List[str]
-    replies: List[str]
+    type: Literal['full', 'fuzzy', 'regex']
+    to_me: Optional[bool] = False
+    keywords: list[str]
+    replies: list[str | list[dict]]
+    ignore_case: Optional[bool] = True
 
 
 async def update_conf():

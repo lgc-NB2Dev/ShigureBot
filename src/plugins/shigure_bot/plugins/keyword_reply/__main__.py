@@ -8,10 +8,29 @@ from nonebot.matcher import Matcher
 from .config import config as conf
 
 
-async def parse_reply(reply: str, event: MessageEvent, bot: Bot):
-    return Message(reply.format(at=MessageSegment.at(event.user_id),
-                                qq=event.user_id,
-                                nick=(await bot.get_stranger_info(user_id=event.user_id))['nickname']))
+async def parse_reply(reply: str | list[dict], event: MessageEvent, bot: Bot):
+    at = MessageSegment.at(event.user_id)
+    qq = event.user_id
+    nick = (await bot.get_stranger_info(user_id=event.user_id))['nickname']
+
+    if isinstance(reply, str):
+        return Message(reply.format(at=at, qq=qq, nick=nick))
+
+    msg = Message()
+    for seg in reply:
+        seg_type = seg['type']
+        seg_data = seg['data']
+        if seg_type == 'var':
+            match seg_data:
+                case 'at':
+                    msg.append(at)
+                case 'qq':
+                    msg += str(qq)
+                case 'nick':
+                    msg += nick
+            continue
+        msg.append(MessageSegment(seg_type, seg_data))
+    return msg
 
 
 @on_message(priority=99).handle()
@@ -30,8 +49,12 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher):
             match = lambda _, __: False
 
         for kwd in reply.keywords:
-            if match(event.get_plaintext().lower().strip(), kwd.lower().strip()):
+            msg = str(event.get_message())
+            if reply.ignore_case:
+                msg = msg.lower()
+                kwd = kwd.lower()
+            if match(msg, kwd):
                 await matcher.finish(await parse_reply(random.choice(reply.replies), event, bot))
 
 
-__version__ = '0.1.3'
+__version__ = '0.2.0'
