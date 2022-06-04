@@ -129,22 +129,22 @@ async def _(bot: Bot, event: FriendAddNoticeEvent):
 
 @on_command(allow_cmd, aliases={refuse_cmd}, permission=SUPERUSER | PRIVATE_FRIEND).handle()
 async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawCommand(), args: Message = CommandArg()):
-    async def process(ev, act):
-        if act:
+    async def process(ev):
+        if is_approve:
             await ev.approve(bot)
         else:
             await ev.reject(bot)
+
+    approve_str = '同意' if (is_approve := (cmd == allow_cmd)) else '拒绝'
 
     arg = args.extract_plain_text().split(' ', 1)
     rdm = arg[0].strip()
     ex = arg[1].strip() if len(arg) > 1 else None
 
     if req := tmp.get(rdm):
-        approve_str = '同意' if (is_approve := (cmd == allow_cmd)) else '拒绝'
         tip_sample = f'管理员 {event.sender.nickname}({event.sender.user_id}) 已{approve_str}'
-
         try:
-            await process(req, is_approve)
+            await process(req)
             req_name = '好友' if isinstance(req, FriendRequestEvent) else '邀请进群'
             await matcher.send(f'已{approve_str}该{req_name}请求'
                                f'{(remark_tip := (f"，备注已设为{ex}" if ex and is_approve else ""))}')
@@ -156,8 +156,25 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
             logger.opt(exception=e).exception('请求处理出错')
             await matcher.finish(f'请求处理出错：{e.info["wording"]}')
         tmp.pop(rdm)
+    elif rdm == 'all':
+        reqs = list(tmp.values())
+        tmp.clear()
+        success = 0
+        fail = 0
+        for r in reqs:
+            try:
+                await process(r)
+                success += 1
+            except Exception as e:
+                fail += 1
+                logger.opt(exception=e).exception('请求处理出错')
+
+        await matcher.send(tip_sample := f'已批量{approve_str} {len(reqs)} 个请求，成功 {success} 个，失败 {fail} 个')
+        await send_to_all_admins(bot,
+                                 f'管理员 {event.sender.nickname}({event.sender.user_id}) {tip_sample}',
+                                 [event.sender.user_id])
     else:
         await matcher.finish('未找到该请求')
 
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
