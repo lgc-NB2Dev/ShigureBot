@@ -80,4 +80,4 @@
 ## 联系我/赞助
 
 如果项目使用过程中有任何问题，欢迎联系我  
-[个人资料](https://github.com/lgc2333/lgc2333/README.md)
+[个人资料](https://github.com/lgc2333/)
