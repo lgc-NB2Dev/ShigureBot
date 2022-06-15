@@ -43,7 +43,7 @@ async def _(m: Matcher, state: T_State, event: MessageEvent):
     more = state.get('more', {})
     if item := more.get(msg):
         await m.reject('\n' + (await format_definition(item)) +
-                       '\n\nTip：继续发送候选项可以接着查询，想重新查询请先发送一条其他消息再发送查询指令~', at_sender=True)
+                       '\n\nTip：继续发送候选项可以接着查询~', at_sender=True)
     await m.finish()
 
 
@@ -78,7 +78,7 @@ async def get_geng(m: Matcher, phrase: str, state: T_State):
 
                 await m.send('你是否还想找这些：\n' +
                              '\n'.join(f'【{x}】' for x in more.keys()) + '\n' +
-                             '发送对应梗名字即可继续查询~')
+                             '发送对应梗名字即可继续查询，想重新查询请先发送一条其他消息再发送查询指令~')
                 await m.pause()
         else:
             await m.finish('抱歉，我还没Get到这个梗……（未找到词条）')
