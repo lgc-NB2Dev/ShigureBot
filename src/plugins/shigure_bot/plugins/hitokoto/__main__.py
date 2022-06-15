@@ -52,6 +52,3 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
         await matcher.finish(f'『{ret["hitokoto"]}』\n'
                              f'—— {who if who else ""}「{ret["from"]}」' +
                              (f'\n(https://hitokoto.cn?uuid={ret["uuid"]})' if config.send_link else ''))
-
-
-__version__ = '0.1.1'

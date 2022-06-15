@@ -63,6 +63,3 @@ async def _(bot: Bot, event: PrivateMessageEvent | GroupMessageEvent, matcher: M
                 tmp_dict[chat_id] = None
         else:
             await matcher.finish(f'图片冷却中……请等{conf.delay - time_passed}秒再来吧', at_sender=True)
-
-
-__version__ = '0.1.5'

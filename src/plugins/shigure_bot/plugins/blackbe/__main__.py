@@ -44,6 +44,3 @@ async def _(event: GroupMessageEvent, matcher: Matcher):
                                    f'使用 查云黑{event.user_id} 查询详细信息',
                                    at_sender=True)
                 detect.set_notice_stat(event.group_id, event.user_id, True)
-
-
-__version__ = '1.3.2'

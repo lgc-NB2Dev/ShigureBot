@@ -15,6 +15,3 @@ async def _(matcher: Matcher):
         await matcher.finish('操作失败，请检查后台输出')
     else:
         await matcher.finish('操作完毕')
-
-
-__version__ = '0.2.1'

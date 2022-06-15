@@ -55,6 +55,3 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher):
                 kwd = kwd.lower()
             if match(msg, kwd):
                 await matcher.finish(await parse_reply(random.choice(reply.replies), event, bot))
-
-
-__version__ = '0.2.0'

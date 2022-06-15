@@ -41,6 +41,3 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
         await matcher.finish(f'URL访问失败：\n{e!r}', at_sender=True)
     else:
         await matcher.finish(MessageSegment.image(ret), at_sender=True)
-
-
-__version__ = '0.1.0'

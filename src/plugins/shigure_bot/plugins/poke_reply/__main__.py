@@ -32,6 +32,3 @@ async def _(event: Event, matcher: Matcher, _: PokeNotifyEvent):
         await matcher.send(reply)
         if action:
             await matcher.send(MessageSegment('poke', {'qq': event.user_id}))
-
-
-__version__ = '0.2.2'

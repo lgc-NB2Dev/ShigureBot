@@ -175,6 +175,3 @@ async def _(bot: Bot, event: MessageEvent, matcher: Matcher, cmd: str = RawComma
                                  [event.sender.user_id])
     else:
         await matcher.finish('未找到该请求')
-
-
-__version__ = '1.1.3'

@@ -26,6 +26,3 @@ async def _(bot: Bot, matcher: Matcher, event: GroupDecreaseNoticeEvent):
                 await matcher.finish(await parse_reply(config.leave_message, event, bot))
             case 'kick':
                 await matcher.finish(await parse_reply(config.kick_message, event, bot))
-
-
-__version__ = '1.0.2'

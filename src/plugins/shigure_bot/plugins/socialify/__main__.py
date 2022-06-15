@@ -87,6 +87,3 @@ async def get_im(group, quiet=False, **kwargs):
                 return f'获取Github仓库简介图失败：{e_arg}'
     else:
         return MessageSegment.image(ret)
-
-
-__version__ = '0.1.5'

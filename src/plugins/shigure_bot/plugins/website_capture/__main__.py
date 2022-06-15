@@ -37,6 +37,3 @@ async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
     if not e.status == 0:
         await matcher.finish(f'参数错误！请检查\n{e.message}', at_sender=True)
     await matcher.finish(f'\n{e.message}', at_sender=True)
-
-
-__version__ = '0.2.3'

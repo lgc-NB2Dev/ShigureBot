@@ -202,6 +202,3 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
                      f'DNS服务器：{", ".join(ret["nameServer"])}\n'
                      f'域名状态：{", ".join([x["info"] for x in ret["domainState"]])}')
     ), at_sender=True)
-
-
-__version__ = '0.1.2'
