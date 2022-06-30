@@ -1,0 +1,11 @@
+name: 使用black格式化代码
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Black Code Formatter
+      uses: lgeiger/black-action@v1.0.1
