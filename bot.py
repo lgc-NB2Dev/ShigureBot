@@ -30,7 +30,7 @@ nonebot.load_from_toml("pyproject.toml")
 # do something...
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     nonebot.logger.warning(
         "Always use `nb run` to start the bot instead of manually running!"
     )
