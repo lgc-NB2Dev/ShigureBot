@@ -23,6 +23,8 @@ jobs:
         black $(git ls-files '*.py')
     - name: Push
       run: |
+        git config --global user.email git ${{ secrets.EMAIL }}
+        git config --global user.name ${{ secrets.NAME }}
         git add .
         git commit -m "Use Black to Format Code"
         git push
