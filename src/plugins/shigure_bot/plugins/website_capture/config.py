@@ -14,9 +14,7 @@ class ConfigModel(BaseModel):
 async def update_conf():
     global config
     config = await init(
-        'website_capture',
-        ConfigModel,
-        {'ignore_sites': ['xvideos.com', 'pornhub.com']}
+        "website_capture", ConfigModel, {"ignore_sites": ["xvideos.com", "pornhub.com"]}
     )
 
 

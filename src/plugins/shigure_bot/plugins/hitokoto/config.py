@@ -13,11 +13,7 @@ class ConfigModel(BaseModel):
 
 async def update_conf():
     global config
-    config = await init(
-        'hitokoto',
-        ConfigModel,
-        {'send_link': True}
-    )
+    config = await init("hitokoto", ConfigModel, {"send_link": True})
 
 
 asyncio.get_event_loop().run_until_complete(update_conf())

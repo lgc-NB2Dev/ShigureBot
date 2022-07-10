@@ -9,7 +9,7 @@ config = None
 
 
 class ConfigModel(BaseModel):
-    type: Literal['full', 'fuzzy', 'regex']
+    type: Literal["full", "fuzzy", "regex"]
     to_me: Optional[bool] = False
     keywords: list[str]
     replies: list[str | list[dict]]
@@ -18,11 +18,7 @@ class ConfigModel(BaseModel):
 
 async def update_conf():
     global config
-    config = await init(
-        'keyword_replies',
-        ConfigModel,
-        []
-    )
+    config = await init("keyword_replies", ConfigModel, [])
 
 
 asyncio.get_event_loop().run_until_complete(update_conf())

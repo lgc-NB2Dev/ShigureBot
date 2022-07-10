@@ -10,7 +10,7 @@ from .config import config as conf
 
 
 async def read_file(file_name):
-    async with aiofiles.open(file_name, 'rb') as f:
+    async with aiofiles.open(file_name, "rb") as f:
         ret = await f.read()
     return ret
 
@@ -18,9 +18,9 @@ async def read_file(file_name):
 async def get_msg():
     reply = random.choice(conf)
     msg = None
-    if reply.type == 'image':
+    if reply.type == "image":
         msg = MessageSegment.image(await read_file(reply.content))
-    elif reply.type == 'text':
+    elif reply.type == "text":
         msg = reply.content
     return msg, reply.action
 
@@ -31,4 +31,4 @@ async def _(event: Event, matcher: Matcher, _: PokeNotifyEvent):
     if reply:
         await matcher.send(reply)
         if action:
-            await matcher.send(MessageSegment('poke', {'qq': event.user_id}))
+            await matcher.send(MessageSegment("poke", {"qq": event.user_id}))

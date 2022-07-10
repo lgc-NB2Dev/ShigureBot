@@ -39,11 +39,11 @@ class BaseConfig:
                     elif isinstance(cf, list):
                         self._tmp = [self._model(**x) for x in cf]
                     else:
-                        raise TypeError('Type not supported')
+                        raise TypeError("Type not supported")
                 else:
                     self._tmp = cf
             except (pydantic.ValidationError, json.JSONDecodeError) as e:
-                logger.exception('配置文件格式错误')
+                logger.exception("配置文件格式错误")
                 raise e
 
         return self._tmp
@@ -52,7 +52,7 @@ class BaseConfig:
         if not os.path.exists(self._path):
             conf = self._default_conf
         else:
-            async with aiofiles.open(self._path, encoding='utf-8') as f:
+            async with aiofiles.open(self._path, encoding="utf-8") as f:
                 conf = json.loads(await f.read())
 
             if isinstance(conf, dict) and isinstance(self._default_conf, dict):
@@ -66,17 +66,20 @@ class BaseConfig:
         return conf
 
     async def save(self, custom_conf=None):
-        async with aiofiles.open(self._path, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(
-                _model_to_object(custom_conf if custom_conf else self._tmp),
-                indent=2, ensure_ascii=False
-            ))
+        async with aiofiles.open(self._path, "w", encoding="utf-8") as f:
+            await f.write(
+                json.dumps(
+                    _model_to_object(custom_conf if custom_conf else self._tmp),
+                    indent=2,
+                    ensure_ascii=False,
+                )
+            )
 
     def clear_tmp(self):
         self._tmp = None
 
     def _get_path(self):
-        fpath = os.path.join('shigure', self._filename + '.json')
+        fpath = os.path.join("shigure", self._filename + ".json")
         dir_name = os.path.dirname(fpath)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
@@ -84,20 +87,20 @@ class BaseConfig:
 
     def _check_tmp_is_list(self):
         if not isinstance(self._tmp, list):
-            raise TypeError('Operation does not correspond to type')
+            raise TypeError("Operation does not correspond to type")
 
     def _check_tmp_is_model(self):
         if not isinstance(self._tmp, BaseModel):
-            raise TypeError('Operation does not correspond to type')
+            raise TypeError("Operation does not correspond to type")
 
     def __getattr__(self, item):
-        if isinstance(item, str) and item.startswith('_'):
+        if isinstance(item, str) and item.startswith("_"):
             return self.__dict__[item]
         else:
             return getattr(self._tmp, item)
 
     def __setattr__(self, key, value):
-        if isinstance(key, str) and key.startswith('_'):
+        if isinstance(key, str) and key.startswith("_"):
             self.__dict__[key] = value
         else:
             self._check_tmp_is_model()
@@ -126,8 +129,12 @@ class BaseConfig:
         yield from self._tmp
 
 
-async def init(filename: str, model: Callable[[...], BaseModel] = None, default_conf: dict | list = None,
-               cls: Callable[..., BaseConfig] = None):
+async def init(
+    filename: str,
+    model: Callable[[...], BaseModel] = None,
+    default_conf: dict | list = None,
+    cls: Callable[..., BaseConfig] = None,
+):
     if cls:
         conf = cls(filename, model, default_conf)
     else:

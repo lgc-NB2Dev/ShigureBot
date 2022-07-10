@@ -13,7 +13,9 @@ def get_soup():
 
 async def load_soup():
     global soup
-    async with aiofiles.open(os.path.join(os.path.dirname(__file__), 'soup.txt'), encoding='utf-8') as f:
+    async with aiofiles.open(
+        os.path.join(os.path.dirname(__file__), "soup.txt"), encoding="utf-8"
+    ) as f:
         soup = [x.strip() for x in await f.readlines()]
 
 
