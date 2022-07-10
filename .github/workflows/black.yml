@@ -1,0 +1,9 @@
+name: Black Formatter
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: jpetrucciani/black-check@master
