@@ -25,10 +25,10 @@ async def _():
     await bot.send_group_msg(
         group_id=775075182,
         message=MessageSegment.at(80117801)
-        + (
-            f"\n"
-            f"现在距离 2023 年高考还有\n"
-            f"{interval.days}\n"
-            f"Good good study, day day up!!"
-        ),
+                + (
+                    f"\n"
+                    f"现在距离 2023 年高考还有\n"
+                    f"{format_timedelta(interval)}\n"
+                    f"Good good study, day day up!!"
+                ),
     )
