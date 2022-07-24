@@ -15,21 +15,23 @@ class Config(BaseConfig):
         if not self._tmp:
             tmp = await super(Config, self).get()
             for i in tmp.copy():
-                if i.type == 'image_folder':
+                if i.type == "image_folder":
                     tmp.remove(i)
                     for n in find_all_file(i.content):
-                        tmp.append(ConfigModel(type='image', content=n, action=i.action))
-                elif i.type == 'texts':
+                        tmp.append(
+                            ConfigModel(type="image", content=n, action=i.action)
+                        )
+                elif i.type == "texts":
                     tmp.remove(i)
                     for n in i.content:
-                        tmp.append(ConfigModel(type='text', content=n, action=i.action))
-            logger.debug(f'Parsed config: {tmp}')
+                        tmp.append(ConfigModel(type="text", content=n, action=i.action))
+            logger.debug(f"Parsed config: {tmp}")
             self._tmp = tmp
         return self._tmp
 
 
 class ConfigModel(BaseModel):
-    type: Literal['text', 'image', 'texts', 'image_folder']
+    type: Literal["text", "image", "texts", "image_folder"]
     content: str | list[str]
     action: Optional[bool]
 
@@ -45,12 +47,7 @@ def find_all_file(base):
 
 async def update_conf():
     global config
-    config = await init(
-        'poke_replies',
-        ConfigModel,
-        [],
-        cls=Config
-    )
+    config = await init("poke_replies", ConfigModel, [], cls=Config)
 
 
 asyncio.get_event_loop().run_until_complete(update_conf())

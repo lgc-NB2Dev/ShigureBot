@@ -20,15 +20,17 @@ class ConfigModel(BaseModel):
 async def update_conf():
     global config
     config = await init(
-        'sexpic',
+        "sexpic",
         ConfigModel,
-        {'only_private'     : False,
-         'trigger_words'    : ['色图', '涩图', '瑟图', '二次元', '二刺猿', '二刺螈'],
-         'delay'            : 120,
-         'proxy'            : 'http://127.0.0.1:10809',
-         'withdraw_delay'   : 0,
-         'send_details'     : True,
-         'can_filter_by_tag': True}
+        {
+            "only_private": False,
+            "trigger_words": ["色图", "涩图", "瑟图", "二次元", "二刺猿", "二刺螈"],
+            "delay": 120,
+            "proxy": "http://127.0.0.1:10809",
+            "withdraw_delay": 0,
+            "send_details": True,
+            "can_filter_by_tag": True,
+        },
     )
 
 

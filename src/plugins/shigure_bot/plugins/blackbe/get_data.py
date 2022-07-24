@@ -6,18 +6,18 @@ from .datatypes import BlackBEReturn
 tmp_repos = {}
 
 
-async def get_simple_info(token='', **kwargs):
+async def get_simple_info(token="", **kwargs):
     try:
         async with aiohttp.ClientSession() as s:
             async with s.get(
-                    'https://api.blackbe.xyz/openapi/v3/check',
-                    params=kwargs,
-                    headers={'Authorization': f'Bearer {token}'} if token else None
+                "https://api.blackbe.xyz/openapi/v3/check",
+                params=kwargs,
+                headers={"Authorization": f"Bearer {token}"} if token else None,
             ) as raw:
                 ret = await raw.json()
         return BlackBEReturn(**ret)
     except Exception as e:
-        nonebot.logger.opt().error('查询失败')
+        nonebot.logger.opt().error("查询失败")
         return e
 
 
@@ -34,15 +34,15 @@ async def get_private_repo_info(token, ignore_repos=None, **kwargs):
 
         async with aiohttp.ClientSession() as s:
             async with s.post(
-                    'https://api.blackbe.xyz/openapi/v3/check/private',
-                    params=kwargs,
-                    headers={'Authorization': f'Bearer {token}'},
-                    json={'repositories_uuid': repos}
+                "https://api.blackbe.xyz/openapi/v3/check/private",
+                params=kwargs,
+                headers={"Authorization": f"Bearer {token}"},
+                json={"repositories_uuid": repos},
             ) as raw:
                 ret = await raw.json()
         return BlackBEReturn(**ret)
     except Exception as e:
-        nonebot.logger.opt().error('查询失败')
+        nonebot.logger.opt().error("查询失败")
         return e
 
 
@@ -51,8 +51,8 @@ async def get_repos(token):
         global tmp_repos
         async with aiohttp.ClientSession() as s:
             async with s.get(
-                    'https://api.blackbe.xyz/openapi/v3/private/repositories/list',
-                    headers={'Authorization': f'Bearer {token}'}
+                "https://api.blackbe.xyz/openapi/v3/private/repositories/list",
+                headers={"Authorization": f"Bearer {token}"},
             ) as raw:
                 repos = await raw.json()
                 repos = BlackBEReturn(**repos)

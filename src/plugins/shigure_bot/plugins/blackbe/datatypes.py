@@ -63,17 +63,20 @@ class BlackBEReturn(BaseModel):
     version: str
     codename: str
     time: str
-    data: (BlackBEReturnData |
-           List[BlackBEReturnData] |
-           BlackBEReturnRepoList |
-           BlackBEReturnDataFullInfo |
-           List[None])
+    data: (
+        BlackBEReturnData
+        | List[BlackBEReturnData]
+        | BlackBEReturnRepoList
+        | BlackBEReturnDataFullInfo
+        | List[None]
+    )
 
 
 class ForwardMsg(list[Message]):
     def append(self, obj):
         super(ForwardMsg, self).append(
-            Message(MessageSegment.text(obj) if isinstance(obj, str) else obj))
+            Message(MessageSegment.text(obj) if isinstance(obj, str) else obj)
+        )
 
     def extend(self, iterable):
         for i in iterable:
@@ -84,16 +87,10 @@ class ForwardMsg(list[Message]):
             {
                 "type": "node",
                 "data": {
-                    "name"   : sender_name,
-                    "uin"    : sender_uin,
-                    "content": [
-                        {
-                            'type': y.type,
-                            'data': y.data
-                        }
-                        for y in x
-                    ]
-                }
+                    "name": sender_name,
+                    "uin": sender_uin,
+                    "content": [{"type": y.type, "data": y.data} for y in x],
+                },
             }
             for x in self
         ]

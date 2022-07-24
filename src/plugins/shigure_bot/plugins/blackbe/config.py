@@ -16,11 +16,9 @@ class ConfigModel(BaseModel):
 async def update_conf():
     global config
     config = await init(
-        'blackbe',
+        "blackbe",
         ConfigModel,
-        {'token'                : '',
-         'ignore_repos'         : [],
-         'use_group_forward_msg': True}
+        {"token": "", "ignore_repos": [], "use_group_forward_msg": True},
     )
 
 

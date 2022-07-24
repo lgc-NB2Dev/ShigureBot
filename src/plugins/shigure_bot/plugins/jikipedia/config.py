@@ -15,10 +15,7 @@ class ConfigModel(BaseModel):
 async def update_conf():
     global config
     config = await init(
-        'jikipedia',
-        ConfigModel,
-        {'send_suggestion': True,
-         'suggestion_num' : 3}
+        "jikipedia", ConfigModel, {"send_suggestion": True, "suggestion_num": 3}
     )
 
 

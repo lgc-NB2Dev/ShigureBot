@@ -17,12 +17,14 @@ class ConfigModel(BaseModel):
 async def update_conf():
     global config
     config = await init(
-        'join_leave_tip',
+        "join_leave_tip",
         ConfigModel,
-        {'join_message' : '{at} 欢迎新入群的rbq~',
-         'leave_message': '{nick}({qq})默默地离开了我们……',
-         'kick_message' : '{nick}({qq})被至高无上的管理员{admin}制裁了！！（躲',
-         'except_groups': []}
+        {
+            "join_message": "{at} 欢迎新入群的rbq~",
+            "leave_message": "{nick}({qq})默默地离开了我们……",
+            "kick_message": "{nick}({qq})被至高无上的管理员{admin}制裁了！！（躲",
+            "except_groups": [],
+        },
     )
 
 
