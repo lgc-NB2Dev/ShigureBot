@@ -40,7 +40,7 @@ async def _(
 async def _(event: GroupMessageEvent, matcher: Matcher):
     if not detect.has_noticed(event.group_id, event.user_id):
         ret = await detect.detect(event.user_id)
-        if ret and ret.data.exist:
+        if ret and ret.exist:
             if not list_has_same_item(
                 conf.ignore_repos, [x.uuid for x in ret.data.info]
             ):
