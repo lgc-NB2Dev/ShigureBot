@@ -16,7 +16,7 @@ def format_timedelta(t: datetime.timedelta):
     return s
 
 
-@scheduler.scheduled_job('cron', hour='*')
+@scheduler.scheduled_job("cron", hour="*")
 async def _():
     gaokao_t = datetime.datetime(2023, 6, 7)
     now = datetime.datetime.now()
@@ -24,10 +24,11 @@ async def _():
     bot: Bot = get_bot()
     await bot.send_group_msg(
         group_id=775075182,
-        message=MessageSegment.at(80117801) + (
-            f'\n'
-            f'现在距离 2023 年高考还有\n'
-            f'{interval.days}\n'
-            f'Good good study, day day up!!'
-        )
+        message=MessageSegment.at(80117801)
+        + (
+            f"\n"
+            f"现在距离 2023 年高考还有\n"
+            f"{interval.days}\n"
+            f"Good good study, day day up!!"
+        ),
     )
