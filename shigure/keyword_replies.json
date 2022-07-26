@@ -1,0 +1,73 @@
+[
+  {
+    "type": "full",
+    "to_me": true,
+    "keywords": [
+      ""
+    ],
+    "replies": [
+      "在哦～",
+      "嘿嘿～找我干嘛？",
+      "锵锵！时雨闪亮登场～",
+      "请问有什么需要吗？",
+      "来喽～"
+    ]
+  },
+  {
+    "type": "full",
+    "to_me": false,
+    "keywords": [
+      "功能",
+      "菜单",
+      "帮助"
+    ],
+    "replies": [
+      "最近上线了新的Bot菜单，来看看吧～\nhttps://shigure.lgc2333.top/"
+    ]
+  },
+  {
+    "type": "regex",
+    "to_me": false,
+    "keywords": [
+      "赞助(作者|主人)?"
+    ],
+    "replies": [
+      [
+        {
+          "type": "var",
+          "data": "at"
+        },
+        {
+          "type": "text",
+          "data": {
+            "text": "\n支持一下可怜的孩子吧(\n可以在备注里写上你的留言，会加到Bot功能页的赞助列表~\n爱发电："
+          }
+        },
+        {
+          "type": "image",
+          "data": {
+            "file": "file:///C:\\Users\\Administrator\\Desktop\\python\\ShigureBot\\nb2\\shigure\\donate\\afdian.jpeg"
+          }
+        },
+        {
+          "type": "text",
+          "data": {
+            "text": "也可以直接赞助："
+          }
+        },
+        {
+          "type": "image",
+          "data": {
+            "file": "file:///C:\\Users\\Administrator\\Desktop\\python\\ShigureBot\\nb2\\shigure\\donate\\direct.png"
+          }
+        },
+        {
+          "type": "text",
+          "data": {
+            "text": "感谢各位大佬的赞助！！"
+          }
+        }
+      ]
+    ]
+  }
+]

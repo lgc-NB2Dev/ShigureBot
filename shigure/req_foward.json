@@ -1,0 +1,8 @@
+{
+  "auto_allow_superusers": true,
+  "forward_friend_req": false,
+  "forward_group_invite": false,
+  "auto_allow_anyone": true,
+  "send_addition_notice": false,
+  "send_leave_notice": false
+}
