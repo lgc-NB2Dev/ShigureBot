@@ -25,7 +25,7 @@ async def delete_temp():
 
 @on_command("查云黑").handle()
 async def _(
-        bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = CommandArg()
+    bot: Bot, event: MessageEvent, matcher: Matcher, args: Message = CommandArg()
 ):
     if at := args["at"]:
         await send_info_msg(bot, event, qq=at[0].data["qq"])
@@ -43,11 +43,12 @@ async def _(event: GroupMessageEvent, matcher: Matcher):
         if ret and ret.data:
             if ret.data.exist:
                 if not list_has_same_item(
-                        conf.ignore_repos, [x.uuid for x in ret.data.info]
+                    conf.ignore_repos, [x.uuid for x in ret.data.info]
                 ):
                     await matcher.send(
-                        f"在BlackBE存在违规记录！\n" f"使用 查云黑{event.user_id} 查询详细信息", at_sender=True
+                        f"在BlackBE存在违规记录！\n" f"使用 查云黑{event.user_id} 查询详细信息",
+                        at_sender=True,
                     )
                     detect.set_notice_stat(event.group_id, event.user_id, True)
         else:
-            logger.exception(f'BlackBE检测失败！返回值不正常：{ret}')
+            logger.exception(f"BlackBE检测失败！返回值不正常：{ret}")
