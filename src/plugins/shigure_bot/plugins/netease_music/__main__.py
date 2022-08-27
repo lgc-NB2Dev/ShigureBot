@@ -52,7 +52,7 @@ async def _(m: Matcher, state: T_State, name: str = ArgPlainText("song")):
         tmp.append(f"{i + 1}. {format_song_name(song)} - {format_song_ars(song)}")
 
     song_li = "\n".join(tmp)
-    await m.send(f"【{name}】的搜索结果：\n\n{song_li}\n\n" f"Tip：直接发送歌曲序号即可选择")
+    await m.send(f"【{name}】的搜索结果：\n\n{song_li}\n\n" f"Tip：直接发送歌曲序号即可选择，发送0取消")
 
 
 @pick_matcher.got("index")
@@ -62,6 +62,9 @@ async def _(m: Matcher, ret: dict = Arg("ret"), index: str = ArgPlainText("index
         await m.reject("选项只能为整数，请重新选择")
 
     index = int(index)
+    if index == 0:
+        return await m.finish("已取消选择")
+
     list_len = len(ret["songs"])
     if not 1 <= index <= list_len:
         await m.reject(f"选项只能为1~{list_len}，请重选")
