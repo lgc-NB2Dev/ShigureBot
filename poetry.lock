@@ -148,6 +148,14 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)"
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
 
 [[package]]
+name = "awaits"
+version = "0.0.1"
+description = "async + threads + decorators = ?"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "binaryornot"
 version = "0.4.4"
 description = "Ultra-lightweight pure Python package to check if a file is binary or text."
@@ -162,7 +170,7 @@ chardet = ">=3.0.2"
 name = "certifi"
 version = "2022.6.15"
 description = "Python package for providing Mozilla's CA Bundle."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -703,6 +711,17 @@ python-versions = ">=3.7"
 markdown = ">=3.2"
 
 [[package]]
+name = "pyncm"
+version = "1.6.7.3"
+description = "NeteaseCloudMusic APIs for Python 3.x 适用于 Python 3 的网易云音乐 API"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -780,7 +799,7 @@ python-versions = ">=3.6"
 name = "requests"
 version = "2.28.1"
 description = "Python HTTP for Humans."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7, <4"
 
@@ -898,7 +917,7 @@ test = ["pytest-mock (>=3.3)", "pytest (>=4.3)"]
 name = "urllib3"
 version = "1.26.11"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4"
 
@@ -1015,7 +1034,7 @@ jieba = ">=0.42.1"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10.0,<4.0.0"
-content-hash = "fa272d25a75b2a967cbfaffa858a743d17b5f73d40d735a3fca56e6f6c6f8d6a"
+content-hash = "53ff4568b9304e47dcb908169cd3ffbfd100dbd592da3e60b0bee1aedb743a4f"
 
 [metadata.files]
 aiofiles = [
@@ -1123,6 +1142,7 @@ attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},
 ]
+awaits = []
 binaryornot = [
     {file = "binaryornot-0.4.4-py2.py3-none-any.whl", hash = "sha256:b8b71173c917bddcd2c16070412e369c3ed7f0528926f70cac18a6c97fd563e4"},
     {file = "binaryornot-0.4.4.tar.gz", hash = "sha256:359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061"},
@@ -1462,6 +1482,7 @@ pygments = [
 pygtrie = []
 pylint = []
 pymdown-extensions = []
+pyncm = []
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},

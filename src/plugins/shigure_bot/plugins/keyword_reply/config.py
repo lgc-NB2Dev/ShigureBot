@@ -21,4 +21,4 @@ async def update_conf():
     config = await init("keyword_replies", ConfigModel, [])
 
 
-asyncio.get_event_loop().run_until_complete(update_conf())
+asyncio.run(update_conf())

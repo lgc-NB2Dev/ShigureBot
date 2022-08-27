@@ -28,4 +28,4 @@ async def update_conf():
     )
 
 
-asyncio.get_event_loop().run_until_complete(update_conf())
+asyncio.run(update_conf())

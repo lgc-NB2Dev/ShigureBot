@@ -50,4 +50,4 @@ async def update_conf():
     config = await init("poke_replies", ConfigModel, [], cls=Config)
 
 
-asyncio.get_event_loop().run_until_complete(update_conf())
+asyncio.run(update_conf())

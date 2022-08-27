@@ -19,6 +19,8 @@ nonebot-adapter-onebot = "^2.0.0-beta.1"
 jieba = "^0.42.1"
 yinglish = "^1.0.1"
 pathlib = "^1.0.1"
+pyncm = "^1.6.7"
+awaits = "^0.0.1"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"

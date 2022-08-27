@@ -19,4 +19,4 @@ async def load_soup():
         soup = [x.strip() for x in await f.readlines()]
 
 
-asyncio.get_event_loop().run_until_complete(load_soup())
+asyncio.run(load_soup())

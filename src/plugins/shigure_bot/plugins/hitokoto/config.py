@@ -16,4 +16,4 @@ async def update_conf():
     config = await init("hitokoto", ConfigModel, {"send_link": True})
 
 
-asyncio.get_event_loop().run_until_complete(update_conf())
+asyncio.run(update_conf())
