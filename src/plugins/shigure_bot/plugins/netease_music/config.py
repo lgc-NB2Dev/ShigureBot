@@ -28,7 +28,7 @@ async def update_conf():
             "phone": "",
             "pwd": "",
             "fake_ip": None,
-            "list_limit": 10
+            "list_limit": 10,
         },
     )
 
