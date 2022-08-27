@@ -18,8 +18,8 @@ _ret_template = BlackBEReturn(
 
 
 class BlackBEDetect:
-    tmp_black: dict
-    tmp_noticed: dict
+    tmp_black: dict = {}
+    tmp_noticed: dict = {}
 
     def __init__(self):
         pass
