@@ -23,7 +23,7 @@ async def update_conf():
             "proxy": "http://127.0.0.1:10809",
             "group_forward": True,
             "saucenao_key": "",
-            "max_num": 2
+            "max_num": 2,
         },
     )
 
