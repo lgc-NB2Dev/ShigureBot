@@ -93,8 +93,17 @@ async def _(m: Matcher, ret: dict = Arg("ret"), index: str = ArgPlainText("index
         f"请注意流量消耗"
     )
     await m.send(
-        MessageSegment.music_custom(
-            audio_url, audio_url, title, ars, song["al"]["picUrl"]
+        MessageSegment(
+            "music",
+            {
+                "type": "custom",
+                "subtype": "163",
+                "url": audio_url,
+                "audio": audio_url,
+                "title": title,
+                "content": ars,
+                "image": song["al"]["picUrl"],
+            },
         )
     )
 
