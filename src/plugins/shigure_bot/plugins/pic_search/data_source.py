@@ -1,4 +1,3 @@
-import time
 from io import BytesIO
 from typing import BinaryIO, Optional
 
@@ -35,6 +34,7 @@ class ProxiedAIOSauceNao(AIOSauceNao):
         return await super().from_file(file)  # noqa
 
     async def _search(self, params, files=None):
+        # 别问我为什么改成httpx 问就是因为aiohttp报错 真他妈玄学
         session = self._session or httpx.AsyncClient(proxies=self.proxy)
 
         resp = await session.post(self.SAUCENAO_URL, params=params, files=files)
@@ -65,10 +65,6 @@ class ProxiedAIOSauceNao(AIOSauceNao):
             raise ShortLimitReachedError("30 seconds limit reached")
 
         raise UnknownApiError(f"Server returned status code {status_code}")
-
-
-def get_timestamp():
-    return round(time.time() * 1000)
 
 
 async def down_pic(url, use_proxy=False):

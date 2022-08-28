@@ -34,6 +34,7 @@ async def _(
 
     await matcher.send(f"正在使用 {method} 搜索，请稍等")
     msgs = await (search_methods[method])(pic[0].data["url"])
+
     if isinstance(msgs, list):
         if config.group_forward:
             self_nick = (await bot.get_login_info())["nickname"]
@@ -52,7 +53,6 @@ async def _(
 
         for m in msgs:
             await matcher.send(m)
-
     else:
         await matcher.send(msgs)
 
@@ -87,7 +87,7 @@ async def saucenao(pic) -> list[Message] | str:
             f"来源：{source}\n"
             f"标题：{r.title}\n"
             f"作者：{r.author}\n"
-            f"链接：{urls}\n"
+            f"链接：{urls}"
         )
         ims.append(im)
 
