@@ -81,10 +81,7 @@ async def get_geng(m: Matcher, phrase: str, state: T_State):
 
                 await m.send(
                     (
-                        (
-                            ("你是否还想找这些：\n" + "\n".join(f"【{x}】" for x in more))
-                            + "\n"
-                        )
+                        (("你是否还想找这些：\n" + "\n".join(f"【{x}】" for x in more)) + "\n")
                         + "发送对应梗名字即可继续查询，想重新查询请先发送一条其他消息再发送查询指令~"
                     )
                 )
