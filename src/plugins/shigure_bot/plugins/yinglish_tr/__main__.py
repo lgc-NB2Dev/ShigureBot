@@ -14,7 +14,7 @@ async def _(matcher: Matcher, arg: Message = CommandArg()):
         arg_li = arg.split(" ")
 
         if sex_lvl := re.match("(-?\d{1,3}(\.\d+)?)%", arg_li[-1]):
-            lvl = float(sex_lvl.group(1))
+            lvl = float(sex_lvl[1])
             if lvl <= 0:
                 return await matcher.finish("不！够！涩！！（淫乱度不能低于或等于0%）", at_sender=True)
             if lvl > 100:

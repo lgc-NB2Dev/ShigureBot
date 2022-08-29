@@ -24,7 +24,7 @@ handler = on_shell_command("网页截图", parser=parser)
 async def _(matcher: Matcher, args: Namespace = ShellCommandArgs()):
     url = args.url
     for i in config.ignore_sites:
-        if not url.find(i) == -1:
+        if url.find(i) != -1:
             await matcher.finish("服了你们了，搞事的都给爷爬", at_sender=True)
 
     delay = args.delay
@@ -35,6 +35,6 @@ async def _(matcher: Matcher, args: Namespace = ShellCommandArgs()):
 
 @handler.handle()
 async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
-    if not e.status == 0:
+    if e.status != 0:
         await matcher.finish(f"参数错误！请检查\n{e.message}", at_sender=True)
     await matcher.finish(f"\n{e.message}", at_sender=True)

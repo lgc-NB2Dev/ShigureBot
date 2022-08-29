@@ -47,9 +47,10 @@ async def _(m: Matcher, state: T_State, name: str = ArgPlainText("song")):
 
     state["ret"] = ret
 
-    tmp = []
-    for i, song in enumerate(ret["songs"]):
-        tmp.append(f"{i + 1}. {format_song_name(song)} - {format_song_ars(song)}")
+    tmp = [
+        f"{i + 1}. {format_song_name(song)} - {format_song_ars(song)}"
+        for i, song in enumerate(ret["songs"])
+    ]
 
     song_li = "\n".join(tmp)
     await m.send(f"【{name}】的搜索结果：\n\n{song_li}\n\n" f"Tip：直接发送歌曲序号即可选择，发送0取消")
@@ -113,4 +114,4 @@ async def _(m: Matcher):
     ret = await login()
     if isinstance(ret, Exception):
         return await m.finish(f"登录失败\n{ret!r}")
-    await m.finish(f"登录成功")
+    await m.finish("登录成功")

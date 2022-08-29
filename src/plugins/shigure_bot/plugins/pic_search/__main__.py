@@ -65,17 +65,12 @@ async def saucenao(pic) -> list[Message] | str:
         return f"搜索失败！失败信息如下：\n{e!r}"
 
     if not ret:
-        return f"没有搜索到结果"
+        return "没有搜索到结果"
 
     ims = []
     for r in ret.results[: config.max_num]:
         urls = "\n".join(r.urls)
-        source = "未知"
-        for k, v in DB.__dict__.items():
-            if v == r.index_id:
-                source = k
-                break
-
+        source = next((k for k, v in DB.__dict__.items() if v == r.index_id), "未知")
         im = Message()
         try:
             im += MessageSegment.image(await down_pic(r.thumbnail, True))

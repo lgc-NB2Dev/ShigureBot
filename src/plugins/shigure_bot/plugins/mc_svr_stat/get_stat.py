@@ -81,7 +81,7 @@ async def motd(address: str, full=False):
     players_max = ret["players"]["max"]
     online_percent = round(players_online / players_max * 100, 2)
 
-    full_tip = f"\n注：使用 !motdfull 查看全部玩家列表及mod列表" if not full else ""
+    full_tip = "" if full else f"\n注：使用 !motdfull 查看全部玩家列表及mod列表"
 
     return (
         MessageSegment.text(f"[MCJE服务器信息]\n")

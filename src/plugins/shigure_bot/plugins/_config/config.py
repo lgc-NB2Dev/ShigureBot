@@ -58,7 +58,7 @@ class BaseConfig:
             if isinstance(conf, dict) and isinstance(self._default_conf, dict):
                 # 将未配置的配置项配置为默认
                 for k, v in self._default_conf.items():
-                    if not k in conf:
+                    if k not in conf:
                         conf[k] = v
 
         await self.save(conf)  # format / write default
@@ -69,7 +69,7 @@ class BaseConfig:
         async with aiofiles.open(self._path, "w", encoding="utf-8") as f:
             await f.write(
                 json.dumps(
-                    _model_to_object(custom_conf if custom_conf else self._tmp),
+                    _model_to_object(custom_conf or self._tmp),
                     indent=2,
                     ensure_ascii=False,
                 )
@@ -79,7 +79,7 @@ class BaseConfig:
         self._tmp = None
 
     def _get_path(self):
-        fpath = os.path.join("shigure", self._filename + ".json")
+        fpath = os.path.join("shigure", f"{self._filename}.json")
         dir_name = os.path.dirname(fpath)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
