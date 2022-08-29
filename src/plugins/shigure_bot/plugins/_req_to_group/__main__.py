@@ -64,8 +64,7 @@ async def _(
     bot: Bot, event: GroupMessageEvent, matcher: Matcher, args: Message = CommandArg()
 ):
     rdm = args.extract_plain_text().strip()
-    req: GroupRequestEvent = tmp.get(rdm)
-    if req:
+    if req := tmp.get(rdm):
         if req.user_id == event.user_id:
             try:
                 await req.approve(bot)

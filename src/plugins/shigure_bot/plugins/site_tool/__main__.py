@@ -45,9 +45,7 @@ def format_return(ret, func=None):
 async def get_api_resp(name, params, original=False) -> dict | list | bytes:
     async with aiohttp.ClientSession() as s:
         async with s.get(f"https://api.gmit.vip/Api/{name}", params=params) as resp:
-            if original:
-                return await resp.read()
-            return await resp.json()
+            return await resp.read() if original else await resp.json()
 
 
 def format_json_time(t):
@@ -63,9 +61,7 @@ def format_json_time(t):
 async def _(matcher: Matcher, event: MessageEvent, args: Message = CommandArg()):
     if img := args["image"]:
         pass
-    elif event.reply and (img := event.reply.message["image"]):
-        pass
-    else:
+    elif not event.reply or not (img := event.reply.message["image"]):
         await matcher.finish("请附带/回复要解析的二维码图片")
 
     await matcher.finish(
@@ -150,11 +146,11 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
 
     params = {"url": arg}
     qq = await get_api_resp("TencentUrl", params)
-    if not qq["code"] == 200:
+    if qq["code"] != 200:
         await matcher.finish(format_return(qq))
 
     wx = await get_api_resp("WxUrl", params)
-    if not wx["code"] == 200:
+    if wx["code"] != 200:
         await matcher.finish(format_return(wx))
 
     wx["data"]["qq"] = qq["data"]["type"]

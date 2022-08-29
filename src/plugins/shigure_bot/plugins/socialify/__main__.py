@@ -66,8 +66,7 @@ handler = on_shell_command("socialify", parser=parser)
 
 def get_reply_img(event: Event):
     if event.reply:
-        img = event.reply.message["image"]
-        if img:
+        if img := event.reply.message["image"]:
             return img[0].data["url"]
 
 
@@ -80,7 +79,7 @@ async def _(matcher: Matcher, event: Event, args: Namespace = ShellCommandArgs()
 
 @handler.handle()
 async def _(matcher: Matcher, e: ParserExit = ShellCommandArgs()):
-    if not e.status == 0:
+    if e.status != 0:
         await matcher.finish(f"参数错误！请检查\n{e.message}", at_sender=True)
     await matcher.finish(f"\n{e.message}", at_sender=True)
 

@@ -52,11 +52,12 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     else:
         who = ret["from_who"]
         await matcher.finish(
-            f'『{ret["hitokoto"]}』\n'
-            f'—— {who if who else ""}「{ret["from"]}」'
-            + (
-                f'\n(https://hitokoto.cn?uuid={ret["uuid"]})'
-                if config.send_link
-                else ""
+            (
+                f'『{ret["hitokoto"]}』\n—— {who or ""}「{ret["from"]}」'
+                + (
+                    f'\n(https://hitokoto.cn?uuid={ret["uuid"]})'
+                    if config.send_link
+                    else ""
+                )
             )
         )

@@ -70,24 +70,22 @@ async def get_geng(m: Matcher, phrase: str, state: T_State):
                 f"抱歉，我还没Get到这个梗……（{ret.message.title}：{ret.message.content}）"
             )
 
-        definitions = filter_definitions(ret)
-        if definitions:
+        if definitions := filter_definitions(ret):
             await m.send(
                 "\n" + (await format_definition(definitions[0])), at_sender=True
             )
             if len(definitions) > 1 and config.send_suggestion:
                 cut = definitions[1 : config.suggestion_num + 1]  # 排除第一个
-                more = {}
-                for i in cut:
-                    more[get_numbered_name(more.keys(), i.term.title)] = i
+                more = {get_numbered_name(more.keys(), i.term.title): i for i in cut}
                 state["more"] = more
 
                 await m.send(
-                    "你是否还想找这些：\n"
-                    + "\n".join(f"【{x}】" for x in more.keys())
-                    + "\n"
-                    + "发送对应梗名字即可继续查询，想重新查询请先发送一条其他消息再发送查询指令~"
+                    (
+                        (("你是否还想找这些：\n" + "\n".join(f"【{x}】" for x in more)) + "\n")
+                        + "发送对应梗名字即可继续查询，想重新查询请先发送一条其他消息再发送查询指令~"
+                    )
                 )
+
                 await m.pause()
         else:
             await m.finish("抱歉，我还没Get到这个梗……（未找到词条）")

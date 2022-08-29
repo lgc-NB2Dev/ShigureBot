@@ -15,8 +15,8 @@ async def get_capture(url, delay, width, height):
 
 
 async def get_msg(url: str, delay: int, width: int, height: int):
-    if url.find("http://") == -1 and url.find("https://") == -1:
-        url = "http://" + url
+    if "http://" not in url and "https://" not in url:
+        url = f"http://{url}"
 
     try:
         img = await get_capture(url, delay, width, height)

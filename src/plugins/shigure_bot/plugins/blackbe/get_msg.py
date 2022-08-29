@@ -31,9 +31,8 @@ def parse_lvl(lvl: int):
 async def get_repo_name(_uuid):
     if _uuid == "1":
         return "公有库（1）"
-    else:
-        n = await get_repo_detail(_uuid, conf.token)
-        return f'{n.name if n else "未知"}（{_uuid}）'
+    n = await get_repo_detail(_uuid, conf.token)
+    return f'{n.name if n else "未知"}（{_uuid}）'
 
 
 async def open_file_b(f_name):
@@ -42,12 +41,10 @@ async def open_file_b(f_name):
 
 
 async def parse_info_md(info: BlackBEReturnDataInfo, uuid=""):
-    black_id = info.black_id if info.black_id else uuid
+    black_id = info.black_id or uuid
     repo_name = await get_repo_name(black_id)
 
-    im = list()
-    im.append(f"- 玩家ID：{info.name}")
-    im.append(f"- 危险等级：{parse_lvl(info.level)}")
+    im = [f"- 玩家ID：{info.name}", f"- 危险等级：{parse_lvl(info.level)}"]
     im.append(f"- 记录原因：{info.info}")
     if info.server:
         im.append(f"- 违规服务器：{info.server}")
@@ -64,7 +61,7 @@ async def parse_info_md(info: BlackBEReturnDataInfo, uuid=""):
 
 
 async def parse_info_group_forward(info: BlackBEReturnDataInfo, uuid=""):
-    black_id = info.black_id if info.black_id else uuid
+    black_id = info.black_id or uuid
     repo_name = await get_repo_name(black_id)
 
     im = ForwardMsg()
@@ -93,7 +90,7 @@ async def get_img_msgs(info_photos, markdown=False):
         pic_path = os.path.join(path, photo[photo.rfind("/") + 1 :])
         if not os.path.exists(pic_path):
             if not photo.startswith("http://") or photo.startswith("https://"):
-                photo = "http://" + photo
+                photo = f"http://{photo}"
             try:
                 async with aiohttp.ClientSession() as s:
                     async with s.get(photo) as raw:
@@ -106,11 +103,10 @@ async def get_img_msgs(info_photos, markdown=False):
 
         if e:
             return f"获取图片失败（{photo}）"
-        else:
-            abs_path = os.path.abspath(pic_path)
-            if markdown:
-                return f"![]({abs_path})"
-            return MessageSegment.image(await open_file_b(abs_path))
+        abs_path = os.path.abspath(pic_path)
+        if markdown:
+            return f"![]({abs_path})"
+        return MessageSegment.image(await open_file_b(abs_path))
 
     path = "./shigure/blackbe_tmp"
     if not os.path.exists(path):

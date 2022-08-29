@@ -25,7 +25,7 @@ refuse_cmd = "refuse"
 agree_sample = (
     "-=-=-=-=-=-=-=-\n" f"同意请求：{allow_cmd} {{0}}{{1}}\n" f"拒绝请求：{refuse_cmd} {{0}}"
 )
-tmp = dict()
+tmp = {}
 
 
 def get_random_str(length: int = 6):
@@ -42,7 +42,6 @@ async def send_to_all_admins(bot: Bot, msg, excepts=None):
                 await bot.send_private_msg(user_id=su, message=msg)
             except:
                 logger.exception("发送消息失败")
-                pass
 
 
 async def get_stranger_name(bot: Bot, qq):
