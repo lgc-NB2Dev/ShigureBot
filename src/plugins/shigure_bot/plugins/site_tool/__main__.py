@@ -161,8 +161,7 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     await matcher.finish(
         format_return(
             wx,
-            lambda
-                ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
+            lambda ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
         ),
         at_sender=True,
     )
