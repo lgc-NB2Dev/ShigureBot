@@ -151,19 +151,18 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
 
     params = {"url": arg}
     qq = await get_api_resp("TencentUrl", params)
-    if not qq["code"] == 200:
+    if qq["code"] != 200:
         await matcher.finish(format_return(qq))
 
     wx = await get_api_resp("WxUrl", params)
-    if not wx["code"] == 200:
+    if wx["code"] != 200:
         await matcher.finish(format_return(wx))
 
     wx["data"]["qq"] = qq["data"]["type"]
     await matcher.finish(
         format_return(
             wx,
-            lambda
-                ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
+            lambda ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
         ),
         at_sender=True,
     )

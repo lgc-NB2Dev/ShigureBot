@@ -15,22 +15,21 @@ if config.fake_ip:
 
 
 async def login():
-    if config.login:
-        logger.info("开始登录网易云音乐")
-        try:
-            ret = await wrapper(
-                LoginViaCellphone,
-                phone=config.phone,
-                password=config.pwd,
-                ctcode=config.ct_code,
-            )
-            nick = ret["result"]["content"]["profile"]["nickname"]
-        except Exception as e:
-            logger.opt(exception=e).exception("登录失败，功能将会受到限制")
-            return e
-        logger.info(f"欢迎您，{nick}")
-    else:
+    if not config.login:
         return ValueError("配置文件中 netease_login 不为真")
+    logger.info("开始登录网易云音乐")
+    try:
+        ret = await wrapper(
+            LoginViaCellphone,
+            phone=config.phone,
+            password=config.pwd,
+            ctcode=config.ct_code,
+        )
+        nick = ret["result"]["content"]["profile"]["nickname"]
+    except Exception as e:
+        logger.opt(exception=e).exception("登录失败，功能将会受到限制")
+        return e
+    logger.info(f"欢迎您，{nick}")
 
 
 asyncio.run(login())

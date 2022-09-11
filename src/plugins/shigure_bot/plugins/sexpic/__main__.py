@@ -24,8 +24,7 @@ async def _(bot: Bot, event: PrivateMessageEvent | GroupMessageEvent, matcher: M
 
     if tmp_dict is not None:
         chat_id = event.user_id if event.message_type == "private" else event.group_id
-        last_got = tmp_dict.get(chat_id)
-        if last_got:
+        if last_got := tmp_dict.get(chat_id):
             time_passed = int(time.time() - last_got)
         else:
             time_passed = conf.delay

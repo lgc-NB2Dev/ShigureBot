@@ -14,7 +14,7 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
         await matcher.finish("请输入要访问的URL", at_sender=True)
         return
     if not url.startswith(("http://", "https://")):
-        url = "http://" + unescape(url)
+        url = f"http://{unescape(url)}"
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
@@ -32,7 +32,7 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
         await matcher.finish("请输入要访问的URL", at_sender=True)
         return
     if not url.startswith(("http://", "https://")):
-        url = "http://" + unescape(url)
+        url = f"http://{unescape(url)}"
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:

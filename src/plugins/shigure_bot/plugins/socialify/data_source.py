@@ -36,7 +36,7 @@ async def get_cover(repo, **kwargs):
                 }
             ),
         ) as resp:
-            if not resp.status == 200:
+            if resp.status != 200:
                 raise Exception(await resp.text())
             ret = await resp.text()
 
