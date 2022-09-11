@@ -46,9 +46,8 @@ def format_return(ret, func=None):
 async def get_api_resp(name, params, original=False) -> dict | list | bytes:
     async with aiohttp.ClientSession() as s:
         async with s.get(f"https://api.gmit.vip/Api/{name}", params=params) as resp:
-            if original:
-                return await resp.read()
-            return json.loads(await resp.read())
+            ret = await resp.read()
+            return ret if original else json.loads(ret)
 
 
 def format_json_time(t):
@@ -162,7 +161,8 @@ async def _(matcher: Matcher, args: Message = CommandArg()):
     await matcher.finish(
         format_return(
             wx,
-            lambda ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
+            lambda
+                ret: f'查询网址：{ret["url"]}\nQQ/微信拦截状态：{ret["type"]}/{ret["qq"]}',
         ),
         at_sender=True,
     )
