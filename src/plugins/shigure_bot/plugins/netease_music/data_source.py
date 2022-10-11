@@ -2,7 +2,7 @@ import asyncio
 
 from nonebot import logger
 from pyncm import GetCurrentSession
-from pyncm.apis import LoginFailedException
+from pyncm.apis import WeapiCryptoRequest
 from pyncm.apis.cloudsearch import GetSearchResult, SONG
 from pyncm.apis.login import LoginViaCellphone
 from pyncm.apis.track import GetTrackAudio, GetTrackDetail
@@ -42,13 +42,30 @@ async def search(name, limit=config.list_limit, page=1, stype=SONG):
     return res
 
 
+async def search_dj(name, limit=config.list_limit, page=1):
+    offset = limit * (page - 1)
+
+    @WeapiCryptoRequest  # type:ignore
+    def get():
+        return '/api/search/voice/get', {
+            'keyword': name,
+            'scene': 'normal',
+            'limit': limit or 30,
+            'offset': offset or 0,
+        }
+
+    res = await wrapper(get)
+    logger.debug(f"GetVoice - {res}")
+    return res
+
+
 async def get_track_info(ids: list):
     res = await wrapper(GetTrackDetail, ids)
     logger.debug(f"GetTrackDetail - {res}")
     return res
 
 
-async def get_track_audio(song_ids: list, bit_rate=320000, encode_type="aac"):
+async def get_track_audio(song_ids: list, bit_rate=999999, encode_type="aac"):
     res = await wrapper(
         GetTrackAudio, song_ids, bitrate=bit_rate, encodeType=encode_type
     )
