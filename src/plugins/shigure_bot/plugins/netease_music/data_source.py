@@ -47,11 +47,11 @@ async def search_dj(name, limit=config.list_limit, page=1):
 
     @WeapiCryptoRequest  # type:ignore
     def get():
-        return '/api/search/voice/get', {
-            'keyword': name,
-            'scene': 'normal',
-            'limit': limit or 30,
-            'offset': offset or 0,
+        return "/api/search/voice/get", {
+            "keyword": name,
+            "scene": "normal",
+            "limit": limit or 30,
+            "offset": offset or 0,
         }
 
     res = await wrapper(get)
