@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ShigureBot"
-version = "0.5.0"
+version = "0.5.1"
 description = "Kawaii no Shigure Bot~"
 authors = ["student_2333 <lgc2333@126.com>"]
 license = "LGPL-2.1"
@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10.0,<4.0.0"
 nonebot2 = "^2.0.0b2"
-aiohttp = ">=3.7.4,<3.8.0"
+aiohttp = ">=3.7.4"
 aiofiles = "^0.8.0"
 mcstatus = "^9.0.3"
 pydantic = "^1.9.0"
@@ -21,8 +21,8 @@ yinglish = "^1.0.1"
 pathlib = "^1.0.1"
 pyncm = "^1.6.7"
 awaits = "^0.0.1"
-saucenao-api = "^2.4.0"
 httpx = "^0.23.0"
+aiogram = "^2.22.2"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"

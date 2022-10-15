@@ -8,4 +8,4 @@ path = str((Path(__file__).parent / "plugins").resolve())
 _sub = set()
 _sub |= load_plugins(path)
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
