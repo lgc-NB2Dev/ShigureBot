@@ -18,11 +18,7 @@ async def update_conf():
     config = await init(
         "tg_sync",
         ConfigModel,
-        {
-            "tg_bot_token": "",
-            "tg_chats": {},
-            "proxy": ""
-        },
+        {"tg_bot_token": "", "tg_chats": {}, "proxy": ""},
     )
 
 
