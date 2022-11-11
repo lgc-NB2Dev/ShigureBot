@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ShigureBot"
-version = "0.5.1"
+version = "0.5.2"
 description = "Kawaii no Shigure Bot~"
 authors = ["student_2333 <lgc2333@126.com>"]
 license = "LGPL-2.1"
@@ -27,7 +27,7 @@ aiogram = "^2.22.2"
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"
 pylint = "^2.13.8"
-
+black = "^22.10.0"
 
 [tool.nonebot]
 plugins = []
@@ -36,3 +36,8 @@ plugin_dirs = ["src/plugins"]
 [build-system]
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
