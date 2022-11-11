@@ -15,7 +15,7 @@ def del_escape(string: str):
 
 
 async def motd(address: str, full=False):
-    address = address.strip().replace("：",":")
+    address = address.strip().replace("：", ":")
     if not address:
         if full:
             return MessageSegment.text(
@@ -49,7 +49,7 @@ async def motd(address: str, full=False):
         pic_b64: str = ret.favicon
         pos = pic_b64.find("base64,")
         if pos != -1:
-            pic_b64 = pic_b64[pos + 7:]
+            pic_b64 = pic_b64[pos + 7 :]
         pic_text = "显示图标：" + MessageSegment.image(f"base64://{pic_b64}") + "\n"
 
     players = ""
@@ -66,7 +66,7 @@ async def motd(address: str, full=False):
         if ret_raw["modinfo"]["modList"]:
             mod_list = "\n".join(
                 [f'{x["modid"]} - {x["version"]}' for x in ret["modinfo"]["modList"]][
-                :10
+                    :10
                 ]
             )
             if full:
@@ -84,23 +84,23 @@ async def motd(address: str, full=False):
     full_tip = "" if full else f"\n注：使用 !motdfull 查看全部玩家列表及mod列表"
 
     return (
-            MessageSegment.text(f"[MCJE服务器信息]\n")
-            + pic_text
-            + MessageSegment.text(
-        f'服务端名：{ret.version.name}\n'
-        f'协议版本：{ret.version.protocol}\n'
-        f"当前人数：{players_online}/{players_max}({online_percent}%)\n"
-        f"{players}"
-        f"描述文本：\n{del_escape(desc)}\n"
-        f"游戏延迟：{latency:.2f}ms"
-        f"{mod_info}"
-        f"{full_tip}"
-    )
+        MessageSegment.text(f"[MCJE服务器信息]\n")
+        + pic_text
+        + MessageSegment.text(
+            f"服务端名：{ret.version.name}\n"
+            f"协议版本：{ret.version.protocol}\n"
+            f"当前人数：{players_online}/{players_max}({online_percent}%)\n"
+            f"{players}"
+            f"描述文本：\n{del_escape(desc)}\n"
+            f"游戏延迟：{latency:.2f}ms"
+            f"{mod_info}"
+            f"{full_tip}"
+        )
     )
 
 
 async def motdpe(address: str):
-    address = address.strip().replace("：",":")
+    address = address.strip().replace("：", ":")
     if not address:
         return MessageSegment.text(
             "[MCBE服务器信息]\n" "正确用法:\n" "!motd <服务器IP> (电脑版)\n" "!motdpe <服务器IP> (手机版)"
