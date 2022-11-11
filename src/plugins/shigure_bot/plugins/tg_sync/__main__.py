@@ -9,36 +9,37 @@ from nonebot.permission import SUPERUSER
 from .config import config
 
 
-@on_command('tg_sync', aliases={'tgsync', 'tg同步', '同步到tg'},
-            permission=SUPERUSER).handle()
+@on_command(
+    "tg_sync", aliases={"tgsync", "tg同步", "同步到tg"}, permission=SUPERUSER
+).handle()
 async def _(event: MessageEvent, matcher: Matcher, arg: Message = CommandArg()):
     if not (rep := event.reply):
-        await matcher.finish('请回复你要同步到TG的消息')
+        await matcher.finish("请回复你要同步到TG的消息")
 
     chats = {}
     if arg := arg.extract_plain_text().strip():
         for i in arg.split():
             if not (i in config.tg_chats.keys()):
-                await matcher.finish(f'Chat {i} 在配置文件中不存在')
+                await matcher.finish(f"Chat {i} 在配置文件中不存在")
             chats[i] = config.tg_chats[i]
     else:
         chats = config.tg_chats
 
-    if img := rep.message['image']:
-        img = [x.data['url'] for x in img]
+    if img := rep.message["image"]:
+        img = [x.data["url"] for x in img]
 
-    from_ = f'{rep.sender.nickname}({rep.sender.user_id})'
+    from_ = f"{rep.sender.nickname}({rep.sender.user_id})"
     if isinstance(event, GroupMessageEvent):
-        from_ = f'Group {event.group_id} -> {from_}'
+        from_ = f"Group {event.group_id} -> {from_}"
 
     caption = (
-        f'[ShigureBot - TGSync]\n'
-        f'From: {from_}\n'
-        f'{rep.message.extract_plain_text()}'
+        f"[ShigureBot - TGSync]\n"
+        f"From: {from_}\n"
+        f"{rep.message.extract_plain_text()}"
     )
 
     tg_bot = Bot(config.tg_bot_token, proxy=config.proxy)
-    await matcher.send('开始同步到TG')
+    await matcher.send("开始同步到TG")
     for n, c in chats.items():
         try:
             if img:
@@ -53,9 +54,9 @@ async def _(event: MessageEvent, matcher: Matcher, arg: Message = CommandArg()):
                 await tg_bot.send_message(c, caption)
 
         except Exception as e:
-            logger.exception(f'同步到TG Chat {n}({c}) 失败')
+            logger.exception(f"同步到TG Chat {n}({c}) 失败")
             try:
-                await matcher.send(f'同步到TG Chat {n}({c}) 失败，跳过\n{e!r}')
+                await matcher.send(f"同步到TG Chat {n}({c}) 失败，跳过\n{e!r}")
             except:
                 pass
-    await matcher.finish('同步到TG完毕，如没有失败提示则同步成功完成！')
+    await matcher.finish("同步到TG完毕，如没有失败提示则同步成功完成！")
